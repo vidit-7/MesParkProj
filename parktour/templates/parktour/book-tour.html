@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block headtitle %}{{tour.tour_type}} Book Tour{% endblock headtitle %}
+
+{% block maincontent %}
+<span id="spantour_id" class="d-none" data-tour-id="{{tour.id}}"></span>
+<div class="container mb-4 p-md-5 p-3 shadow bg-body-tertiary">
+    <div class="container my-3">
+        <h1 class="fw-bold text-center pb-3">Booking for our {{tour.tour_type}} Tour</h1>
+        <div class="row">
+            <div class="col-md-6 rounded-2 mt-2"><img class="rounded-2 img-fluid" src="{{tour.imga.url}}" alt=""></div>
+            <div class="col-md-6 rounded-2 mt-2"><img class="rounded-2 img-fluid" src="{{tour.imgb.url}}" alt=""></div>
+        </div>
+        <div class="d-flex flex-column fs-4">
+            <p class="text-secondary">{{tour.descShort}}</p>
+            <div class="d-flex justify-content-between mt-4 fs-4">
+                <p>Weekdays: ${{tour.weekday_price}}</p>
+                <p>Weekends: ${{tour.weekend_price}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            {{booking_form|crispy}}
+            <p id="isBookable" class="fw-bold text-secondary text-center fs-6">Fill in the form to check status.</p>
+            <button type="submit" id="book-conf" class="btn btn-outline-success btn-lg text-center w-100 my-3">Proceed to finalize booking</button>
+        </form>
+    </div>
+</div>
+
+{% endblock maincontent %}
+
+{% block pagejs %}
+<script src="{% static 'js/booking.js' %}"></script>
+{% endblock %}

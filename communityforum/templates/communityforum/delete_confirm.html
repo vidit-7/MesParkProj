@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Delete Confirmation
+{% endblock title %}
+
+
+{% block maincontent %}
+<h1>Delete</h1>
+
+<div class="container-xl">
+    <h2 class="m-2">Are you sure you wish to delete '{{obj}}'?</h2>
+    <div class="d-flex align-items-center">
+    <a class="btn btn-secondary m-2" href="{{request.META.HTTP_REFERER}}">Cancel</a>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <div>
+            <input class="btn btn-danger m-2" type="submit" value="Delete">
+        </div>
+    </form>
+    </div>
+
+</div>
+
+{% endblock maincontent %}

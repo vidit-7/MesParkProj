@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headtitle %}
+Forum Post
+{% endblock headtitle %}
+
+{% block maincontent %}
+
+<div class="container px-md-5 px-1 py-3 postlimSize shadowDiv my-4">
+    <div id="comm-conf" class="rounded p-4 shadow d-none bg-body-tertiary">
+        <p>Are you sure you wish to delete the comment?</p>
+        <div class="d-flex justify-content-evenly">
+            <button id="comm-rem-cancel" class="btn btn-secondary">Cancel</button>
+            <button id="comm-rem-conf" class="btn btn-danger" data-commentrem-id="">Yes, Delete</button>
+        </div>
+    </div>
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'communityForumHome' %}"><i class="bi bi-arrow-left"></i> View all posts</a>
+    <div class="container py-2 my-3 mx-md-2 px-md-2 border-bottom border-2">
+            
+        <h1 class="text-center border-bottom pb-3 mb-3">{{forumPost.title}}</h1>
+        <div class="row row-cols-sm-2 p-2 mb-2">
+            <div>
+                <span class="text-secondary">Posted by: </span>
+                <img class="rounded-circle img-fluid profileimg" src="{{forumPost.user.profile.pic.url}}" alt="">
+                <a class=" h6 fw-bold" href="{% url 'centBaseProfile' forumPost.user.id %}">@{{forumPost.user}}</a>
+            </div>
+            <div class="text-body-secondary text-sm-end">
+                <div>Posted on: {{forumPost.posted}}</div>
+                {% if forumPost.isEdited %}
+                <div>Edited on: {{forumPost.updated}}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-start align-items-center">
+            {% for topic in forumPost.topics.all %}
+            <a href="{% url 'communityForumHome' %}?search={{topic.name}}"
+                class="h6 border text-decoration-none px-2 py-1 me-1 border-secondary rounded"
+                target="_blank">{{topic.name}}</a>
+            {% endfor %}
+        </div>
+
+        {% if request.user == forumPost.user %}
+        <a class="btn btn-sm btn-secondary" href="{% url 'communityEditPost' forumPost.id %}">Edit Post <i class="bi bi-pen"></i></a>
+        <a class="btn btn-sm btn-danger" href="{% url 'communityDeletePost' forumPost.id %}">Delete Post <i class="bi bi-trash3"></i></a>
+        {% endif %}
+
+
+        <div class="my-2">
+            {% if forumPost.video_url != None %}
+            <div class="ratio ratio-16x9 d-flex justify-content-center align-items-center">
+                <iframe src="{{forumPost.video_url}}" frameborder="0" allowfullscreen></iframe>
+            </div>
+            {% endif %}
+            {% if forumPost.image.url != '' %}
+            <div class="d-flex justify-content-center align-items-center">
+                <img class="img-fluid" src="{{forumPost.image.url}}" alt="">
+            </div>
+            {% endif %}
+            <div class="my-2">{{forumPost.content|linebreaks}}</div>
+        </div>
+    </div>
+
+    <h3 class="p-2">Comments: </h3>
+    <div class="comment-wrapper p-2">
+        {% if request.user.is_authenticated %}
+        <div class="comment-form input-group">
+            <textarea id="comment-data" class="form-control" placeholder="Type your comment here"></textarea>
+            <button id="add-comment" data-post-id="{{forumPost.id}}" class="btn btn-primary group-text">Send <i class="bi bi-send mt-1"></i></button>
+        </div>
+        {% else %}
+        <div>
+            <a href="{% url 'centBaseLoginUser' %}">Login to post a comment</a>
+        </div>
+        {% endif %}
+       
+        {% for fcomment in fcomments %}
+        <div class="my-4 border-start border-bottom rounded border-1 border-tertiary p-2">
+            <div class="d-flex justify-content-start align-items-center border-bottom mb-2 pb-2">
+                <div>
+                    <img class="rounded-circle img-fluid profileimg" src="{{fcomment.user.profile.pic.url}}" alt="">
+                    <a class="h6 text-decoration-none" href="{% url 'centBaseProfile' fcomment.user.id %}">
+                        @{{fcomment.user}}</a> - <span class="text-secondary">{{fcomment.posted|timesince}} ago</span>
+                </div>
+                {% if request.user == fcomment.user %}
+
+                <button class="btn btn-sm btn-outline-danger fw-bold mx-2 remove-comment" data-commentrem-id="{{fcomment.id}}">Delete <i class="bi bi-trash3"></i></button>
+                {% endif %}
+            </div>
+            <div class="my-2 ps-1">{{fcomment.comment|linebreaks}}</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock maincontent %}
+
+{% block pagejs %}
+<script src="{% static 'js/comment.js' %}"></script> {% endblock pagejs %}

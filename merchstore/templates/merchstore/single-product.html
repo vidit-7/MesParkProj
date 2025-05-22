@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headtitle %}Product{% endblock headtitle %}
+{% block pagecss %}
+<link rel="stylesheet" href="{% static 'css/productstyle.css' %}">
+{% endblock pagecss %}
+{% block maincontent %}
+<div class="container py-4 px-md-5 px-2 pro-main-cont">
+    <div class="row g-3">
+        <div id="pro-add-to" class="p-3 m-2 rounded pro-search shadow bg-body-tertiary" style="display: none;"></div>
+        <div>
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'merchStoreHome' %}"><i class="bi bi-arrow-left"></i> View all products</a>
+        </div>
+        <div class="single-pro-img col-md-6 mb-2">
+            <div class="overflow-hidden">
+                <img class="card-image-top img-fluid rounded" src="{{product.image.url}}" alt="">
+            </div>
+        </div>
+        <div class="col-md-6 d-flex flex-column shadow-sm p-3 px-5">
+            <div class="mb-2">
+                <h3 class="h5 fw-bold">{{product.name}}</h3>
+                <h4 class="h6 fw-bold border-bottom pb-2">{{product.category}}</h4>
+            </div>
+            <h4 class="h5 mb-2">
+                Price: 
+            {% if product.isOnSale %}
+                <span class="text-body-secondary text-decoration-line-through">${{product.price}}</span>
+                <span class="fw-bold">${{product.sale_price}}</span>
+            {% else %}
+                ${{product.price}}
+                {% endif %}
+            </h4>
+            <div class="mb-4">
+                {% if product.available %}
+                <button data-product-id="{{product.id}}" data-product-action="add"
+                    class="btn btn-sm btn-outline-success update-product-cart">Add to
+                    cart</button>
+                {% else %}
+                <p class="text-body-secondary border border-secondary px-2 py-1">Not
+                    available currently</p>
+                {% endif %}
+            </div>
+            <div class="text-body-secondary">About the product: <br> {{product.desc}}</div>
+        </div>
+    </div>
+</div>
+{% endblock maincontent %}
+
+{% block pagejs %}
+<script src="{% static 'js/cart.js' %}"></script> {% endblock pagejs %}

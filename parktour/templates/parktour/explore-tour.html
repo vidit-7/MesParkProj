@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block headtitle %}{{tour.tour_type}} Tour{% endblock headtitle %}
+
+{% block maincontent %}
+<div class="container mb-4 p-md-5 p-3 shadow bg-body-tertiary rounded">
+    <h2 class="display-4 pb-4 mb-4 text-center border-bottom border-secondary ">Explore The {{tour.tour_type}} Tour Here!</h2>
+    <!-- <a href="{% url 'parkTourBooking' tour.id %}" class="btn btn-lg btn-primary w-100">Book the tour</a> -->
+    <h4 class="pb-3 mb-3 text-secondary text-center">A glimpse of what you will see in our park...</h4>
+    <div class="container mb-4 py-3 border-bottom">
+        <div class="px-md-5 py-2">
+            <div class="ratio ratio-16x9">
+                <iframe class="rounded-2" src="{{tour.video_url}}" frameborder="0"></iframe>
+            </div>
+        </div>
+        <div class="row my-2">
+            <div class="col-md-6 p-2">
+                <div class="ratio ratio-16x9">
+                    <img class="rounded" src="{{tour.imga.url}}" alt="">
+                </div>
+            </div>
+            <div class="col-md-6 p-2">
+                <div class="ratio ratio-16x9">
+                    <img class="rounded" src="{{tour.imgb.url}}" alt="">
+                </div>
+            </div>
+        </div>
+        <div class="py-2">
+            {{tour.desc|linebreaks}}
+        </div>
+        <div class="d-flex justify-content-evenly fs-3">
+            <p>Weekday price (Mon - Fri): ${{tour.weekday_price}}</p>
+            <p>Weekend price (Sat & Sun): ${{tour.weekend_price}}</p>
+        </div>
+    </div>
+    <a href="{% url 'parkTourBooking' tour.id %}" class="btn btn-lg btn-primary w-100">Book the tour</a>
+</div>
+
+{% endblock maincontent %}

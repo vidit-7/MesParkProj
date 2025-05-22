@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block headtitle %}Change password{% endblock headtitle %}
+
+{% block maincontent %}
+<div class="container-sm shadowDiv rounded my-4 p-3 max-form-set">
+    <h1 class="h3 text-center border-bottom border-secondary pb-2 mb-2">Password change @{{request.user}}</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{pass_form|crispy}}
+        <div class="py-2">
+            <input class="btn btn-primary w-100" type="submit" value="Confirm and change">
+        </div>
+    </form>
+    <div class="py-2 mb-3">
+        <a href="{% url 'centBaseEditProfile' %}" class="btn btn-secondary w-100">Cancel</a>
+    </div>
+</div>
+{% endblock maincontent %}

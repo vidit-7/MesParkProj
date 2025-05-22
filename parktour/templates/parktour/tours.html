@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headtitle %}Tours{% endblock headtitle %}
+
+{% block maincontent %}
+<div class="container">
+    <h1 class="display-6 mb-4 text-center">Adventurous tours of Mesozoic Park!</h1>
+
+    {% for tour in tours %}
+    <div class="p-5 mb-4 bg-body-tertiary rounded-3 shadow">
+        <h1 class="display-6 fw-bold">{{tour.tour_type}}</h1>
+        <div class="row">
+            <div class="col-md-5 rounded-2"><img class="rounded-2 img-fluid" src="{{tour.imga.url}}" alt=""></div>
+            <div class="col-md-7 fs-4 d-flex flex-column">
+                <p class="text-secondary">{{tour.descShort}}</p>
+                <div class="d-flex justify-content-between mt-4 fs-4">
+                    <p>Weekdays: ${{tour.weekday_price}}</p>
+                    <p>Weekends: ${{tour.weekend_price}}</p>
+                </div>
+                <a class="btn btn-outline-primary btn-lg mt-auto" href="{% url 'parkTourExplore' tour.id %}">Explore Our {{tour.tour_type}} Tour</a>
+            </div>
+        </div>
+
+
+    </div>
+    {% endfor %}
+
+    {% endblock maincontent %}

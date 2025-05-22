@@ -1,0 +1,8 @@
+body[data-bs-theme="dark"] .shadow{
+    box-shadow: 0 .5rem 1rem rgba(245, 245, 245, 0.125) !important;
+}
+body[data-bs-theme="dark"] .shadow-sm{
+    box-shadow: 0 .125rem .25rem rgba(245, 245, 245, 0.095) !important;
+}
+
+

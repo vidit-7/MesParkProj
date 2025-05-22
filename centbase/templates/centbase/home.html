@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headtitle %}Home{% endblock headtitle %}
+
+{% block maincontent %}
+<!-- <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel" style="margin-top: -25px;">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+            aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="container-fluid p-0">
+            <div class="carousel-item active">
+                <div class="ratio ratio-21x9">
+                    <img src="{% static 'images/caro1.jpg' %}" alt="">
+                </div>
+                <div class="container">
+                    <div class="carousel-caption text-start">
+                        <h1>Example headline.</h1>
+                        <p class="opacity-75">Some representative placeholder content for the first slide of the
+                            carousel.</p>
+                        <p><a class="btn btn-lg btn-primary" href="#">Sign up today</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="ratio ratio-21x9">
+                    <img src="{% static 'images/caro2.png' %}" alt="">
+                </div>
+                <div class="container">
+                    <div class="carousel-caption">
+                        <h1>Another example headline.</h1>
+                        <p>Some representative placeholder content for the second slide of the carousel.</p>
+                        <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="ratio ratio-21x9">
+
+                </div>
+                <div class="container">
+                    <div class="carousel-caption text-end">
+                        <h1>One more for good measure.</h1>
+                        <p>Some representative placeholder content for the third slide of this carousel.</p>
+                        <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+                    </div>
+                </div>
+                
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</div> -->
+
+<div class="container">
+
+    <h1 class="display-4 mb-4 py-4 text-center">Welcome to Mesozoic Park!</h1>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette py-4">
+        <div class="col-md-7 d-flex flex-column">
+            <h2 class="featurette-heading fw-normal lh-1">Wish to visit our park? <span class="text-body-secondary">Book
+                    a tour!</span></h2>
+            <p class="lead">You can book your very own tour of Mesosoic Park today! Click the button below to explore the tours that we offer.</p>
+            <a class="btn btn-lg btn-outline-primary w-100 mt-auto" href="{% url 'parkTourHome' %}">Book a tour!</a>
+        </div>
+        <div class="col-md-5">
+            <div class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto ratio ratio-16x9 shadow-sm">
+                <img class="rounded-2" src="{% static 'images/caro3.jpg' %}" alt="">
+            </div>
+        </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette py-4">
+        <div class="col-md-7 order-md-2 d-flex flex-column">
+            <h2 class="featurette-heading fw-normal lh-1">Check out our exclusive merchandise! <span
+                    class="text-body-secondary">Get your very own Mesozoic park merch today!</span></h2>
+            <p class="lead">Want to buy our exclusive prehistoric animal themed Mesozoic Park merchandise? Get it from out store by clicking the button below.</p>
+            <a class="btn btn-lg btn-outline-primary w-100 mt-auto" href="{% url 'merchStoreHome' %}">Get our merch!</a>
+        </div>
+        <div class="col-md-5 order-md-1">
+            <div class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto ratio ratio-16x9 shadow-sm">
+                <img class="rounded-2" src="{% static 'images/caro2.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <div class="row featurette py-4">
+        <div class="col-md-7 d-flex flex-column">
+            <h2 class="featurette-heading fw-normal lh-1">Discuss anything you want. <span
+                    class="text-body-secondary">Take part in our community! </span></h2>
+            <p class="lead">Discuss your exprerience with other patrons, visitors and community members of the park. Click the button below to go to the forum.</p>
+            <a class="btn btn-lg btn-outline-primary w-100 mt-auto" href="{% url 'communityForumHome' %}">Discuss with
+                the community!</a>
+        </div>
+        <div class="col-md-5">
+            <div class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto ratio ratio-16x9 shadow-sm">
+                <img class="rounded-2" src="{% static 'images/caro1.jpg' %}" alt="">
+            </div>
+        </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+</div>
+
+{% endblock maincontent %}

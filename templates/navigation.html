@@ -1,0 +1,71 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg px-md-5 shadow-sm bg-body-tertiary fixed-top" aria-label="Navbar Medium">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="{% url 'centBaseHome' %}">
+            <img style="width: 54px; margin-right: 8px;" src="{% static 'images/main_logo.png' %}" alt="">
+            <span>
+                Mesozoic Park
+            </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
+            aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMain">
+            <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'centBaseHome' %}"><i class="bi bi-house-door"></i> Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <span class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false"><i class="bi bi-airplane-engines"></i> Tours</span>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'parkTourHome'%}">View Tours</a></li>
+                        <li><a class="dropdown-item" href="{% url 'parkTourBookings' %}">Your Bookings <i class="bi bi-backpack2"></i></a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <span id="merchHighlight" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false"><i class="bi bi-bag"></i> Merchandise</span>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'merchStoreHome'%}">View Products</a></li>
+                        <li><a class="dropdown-item" href="{% url 'merchStoreCart' %}">Cart <i class="bi bi-cart3"></i></a></li>
+                        <li><a class="dropdown-item" href="{% url 'merchStoreOrders' %}">Orders</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'communityForumHome' %}"><i class="bi bi-people"></i> Community</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <span class="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false"><i class="bi bi-circle-half"></i></span>
+                    <ul class="dropdown-menu">
+                        <li><span id="themeSetLight" class="dropdown-item" href="">Light</span></li>
+                        <li><span id="themeSetDark" class="dropdown-item" href="">Dark</span></li>
+                    </ul>
+                </li>
+                {% if request.user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <span class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="img-fluid rounded-circle profileimg"  src="{{user.profile.pic.url}}" alt="">
+                        @{{user.username}}
+                    </span>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'centBaseProfile' user.id %}"><i class="bi bi-person-bounding-box"></i> Your Profile</a></li>
+                        <li><a class="dropdown-item text-danger" href="{% url 'centBaseLogoutUser' %}"><i class="bi bi-box-arrow-right me-1"></i>Logout</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-success mt-md-1 mt-2 mx-md-1" href="{% url 'centBaseRegisterUser' %}">Sign Up</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-outline-success mt-md-1 mt-2 mx-md-1" href="{% url 'centBaseLoginUser' %}">Login</a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

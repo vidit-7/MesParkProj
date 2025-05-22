@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+{% block headtitle %}{{tour.tour_type}} Confirm Booking{% endblock headtitle %}
+
+{% block maincontent %}
+<span id="spantour_id" class="d-none" data-tour-id="{{tour.id}}"></span>
+<div class="container mb-4 p-md-5 p-3 shadow bg-body-tertiary">
+    <a href="{% url 'parkTourExplore' tour.id %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Cancel and go back</a>
+    <div class="container my-3">
+        <h1 class="fw-bold text-center pb-3">Finalize The Booking for our {{tour.tour_type}} Tour</h1>
+        <div class="row">
+            <div class="col-md-5 rounded-2"><img class="rounded-2 img-fluid" src="{{tour.imga.url}}" alt=""></div>
+            <div class="col-md-7 fs-5 d-flex flex-column">
+                <p class="text-secondary">{{tour.descShort}}</p>
+                <div class="mt-4">
+                    <p>Tour: {{tour.tour_type}}</p>
+                    <p><span class="text-secondary">Booking under the name </span>{{request.user.first_name}} {{request.user.last_name}}</p>
+                    <p><span class="text-secondary">Cost of one ticket: </span>${{ticket_price}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-md-3 mt-4 fs-5">
+            <p><span class="text-secondary">Phone: </span>{{b_phone}} </p>
+            <p><span class="text-secondary">Email: </span>{{b_uemail}}</p>
+        </div>
+        <div class="row row-cols-md-3 mt-4 fs-5">
+            <p>Booking for <span class="fw-bold">{{num_tickets}}</span> people.</p>
+            <p>Booking date <span class="fw-bold">{{b_date}}</span></p>
+            <p>Total cost <span class="fw-bold">${{booking_cost}}</span></p>
+        </div>
+    </div>
+    <div class="container">
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="d-none">
+                {{booking_form|crispy}}
+            </div>
+            <input type="hidden" name="confirm-final" value="True">
+            <button type="submit" id="book-conf" class="btn btn-success btn-lg text-center w-100 my-3">Go ahead and book the tour!</button>
+        </form>
+    </div>
+</div>
+
+{% endblock maincontent %}

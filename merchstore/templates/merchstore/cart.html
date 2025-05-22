@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headtitle %}Merch{% endblock headtitle %}
+
+{% block maincontent %}
+<div class="container">
+    <h2>Cart</h2>
+
+    <div class="px-2 py-3 my-3 border border-outline-secondary rounded">
+        <div class="d-flex justify-content-between border-bottom mb-2 py-2">
+            <a class="btn btn-outline-secondary" href="{% url 'merchStoreHome' %}"><i class="bi bi-arrow-left"></i> Products page</a>
+            <a class="btn btn-success" href="{% url 'merchStoreCheckout' %}">Checkout  <i class="bi bi-basket3"></i></a>
+        </div>
+        <div class="d-md-flex justify-content-evenly mt-2 py-2">
+            <h5>Products added: {{products_added}}</h5>
+            <h5>Total items: {{total_items}}</h5>
+            <h5>Cart total: ${{cart_total}}</h5>
+        </div>
+    </div>
+    <div class="row g-md-4 g-2">
+        <div class="col-10">
+            <h5>Product</h5>
+        </div>
+        <div class="col-2">
+            <h5>Price</h5>
+        </div>
+    </div>
+    <div class="container-fluid">
+    {% for cartItem in cartItems %}
+    <div class="row py-2 my-2 border border-body-secondary rounded">
+        <div class="col-md-4 col-12 d-flex justify-content-center align-items-center overflow-hidden">
+            <img class="cart-img" src="{{cartItem.prod.image.url}}" alt="">
+        </div>
+        <div class="col-md-6 col-7 d-flex flex-column p-2 flex-grow-1 justify-content-start">
+            <h5 class="border-bottom border-body-secondary pb-2">{{cartItem.prod.name}}</h5>
+            <div class="mt-auto d-flex justify-content-evenly align-items-center">
+                <div>
+                    {% if cartItem.prod.isOnSale %}
+                    <div class="text-body-secondary text-decoration-line-through">${{cartItem.prod.price}}</div>
+                    <div class="fw-bold">${{cartItem.prod.sale_price}}</div>
+                    {% else %}
+                    <div> ${{cartItem.prod.price}}</div>
+                    {% endif %}
+                </div>
+                 <div class="btn-group">
+                    <button data-product-id="{{cartItem.prod.id}}" data-product-action="reduct" style="font-family: monospace;" class="btn btn-sm btn-success update-product-cart">-</button>
+                    <span class="btn btn-sm btn-outline-success">{{cartItem.qty}}</span>
+                    <button data-product-id="{{cartItem.prod.id}}" data-product-action="add" style="font-family: monospace;" class="btn btn-sm btn-success update-product-cart">+</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-5 border-start border-body-secondary py-3">
+            <p>${{cartItem.item_qty_price}}</p>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+    <div class="my-3">
+        <h5>Cart total: ${{cart_total}}</h5>
+        <a class="btn btn-success w-100" href="{% url 'merchStoreCheckout' %}">Checkout <i class="bi bi-basket3"></i></a>
+    </div>
+</div>
+
+{% endblock maincontent %}
+
+{% block pagejs %}
+<script src="{% static 'js/cart.js' %}"></script> {% endblock pagejs %}

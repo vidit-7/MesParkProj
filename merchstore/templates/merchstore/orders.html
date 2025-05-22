@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headtitle %}Merch{% endblock headtitle %}
+
+{% block maincontent %}
+<div class="container">
+    <h2>Orders</h2>
+    {% if ord_count > 0 %}
+
+    <div class="d-flex flex-column p-1 accordion">
+        {% for order in orders %}
+        <!-- <div>{{order}}</div> -->
+        <div class="d-flex flex-column p-2 border border-body-secondary rounded my-3 {% if order.delivered %}delivered{% endif %}">
+            
+            <div class="d-md-flex justify-content-between my-2 p-1">
+                {% if order.delivered %} <h5>Delivered</h5> {% endif %}
+                <div class="fw-bold">Products ordered: {{order.total_products}}</div>
+                <div class="fw-bold">Total items: x{{order.total_qty}}</div>
+                <div class="fw-bold">Total amount: ${{order.ord_total_price}}</div>
+                <div class="fw-bold">Ordered on: {{order.created_at}}</div>
+            </div>
+            <div class="border-bottom border-body-secondary text-body-secondary">
+                <div>Delivery address: {{order.delivery_add}}</div>
+                <div>Contact number: {{order.phone}}</div>
+            </div>
+            {% for orderItem in order.orderitem_set.all %}
+            <div class="row my-2 mx-2 border-bottom border-body-secondary">
+                <div class="col-sm-3 d-flex justify-content-center align-items-center overflow-hidden">
+                    <img class="cart-img" src="{{orderItem.prod.image.url}}" alt="">
+                </div>
+                <div class="col-sm-4 p-sm-2">
+                    <div class="fw-bold">{{orderItem.prod.name}}</div>
+                    <div class="text-body-secondary">{{orderItem.prod.descShort}}</div>
+                </div>
+                <div class="col-sm-2 p-sm-2">${{orderItem.prod.actualPrice}}</div>
+                <div class="col-sm-1 p-sm-2">x{{orderItem.qty}}</div>
+                <div class="col-sm-2 p-sm-2">${{orderItem.total_price}}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <h4>You have not ordered anything yet.</h4>
+    {% endif %}
+    {% endblock maincontent %}

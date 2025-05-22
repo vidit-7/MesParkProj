@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block headtitle %}Log in{% endblock headtitle %}
+
+{% block maincontent %}
+<div class="container-sm shadow rounded-2 my-4 p-3 max-form-set">
+    <h1 class="h3 text-center border-bottom border-secondary pb-2 mb-2">Login</h1>
+    <form class="logsep" action="" method="POST">
+        {% csrf_token %}
+        <label class="form-label" for="un">Username:</label>
+        <input class="form-control" type="text" name="username" id="un" required>
+
+        <label class="form-label" for="pwd">Password:</label>
+        <input class="form-control" type="password" name="password" id="pwd" required>
+
+        <div class="py-2 my-3">
+            <input class="btn btn-outline-primary w-100" type="submit" value="Log in">
+        </div>
+    </form>
+    <div class="py-2 border-top border-secondary"><span>Don't have an account? </span>
+        <a class="text-secondary" href="{% url 'centBaseRegisterUser' %}">Sign up instead.</a>
+    </div>
+</div>
+{% endblock maincontent %}

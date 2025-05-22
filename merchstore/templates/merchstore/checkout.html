@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block headtitle %}Merch{% endblock headtitle %}
+
+{% block maincontent %}
+<div class="container-fluid px-5">
+    <h2>Confirm and finalize the order for delivery here</h2>
+    <div class="row g-4">
+        <div>
+            <a href="{% url 'merchStoreCart' %}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Back to Cart</a>
+        </div>
+        <div class="col-md-7 px-md-4">
+            <h2>Confirm Order</h2>
+            <h4 class="py-4 border-bottom text-center">Invoice</h4>
+            {% for cartItem in cartItems %}
+            <div class="row py-4 border-bottom border-body-secondary">
+                
+                <div class="col-sm-3 d-flex justify-content-center align-items-center overflow-hidden">
+                    <img class="cart-img" src="{{cartItem.prod.image.url}}" alt="">
+                </div>
+                <div class="col-sm-4 p-sm-2">
+                   <div class="fw-bold">{{cartItem.prod.name}}</div> 
+                </div>
+                <div class="col-sm-2 p-sm-2">${{cartItem.prod.actualPrice}}</div>
+                <div class="col-sm-1 p-sm-2">x{{cartItem.qty}}</div>
+                <div class="col-sm-2 p-sm-2">${{cartItem.item_qty_price}}</div>
+            </div>
+            {% endfor %}
+            <div class="my-3 d-flex justify-content-between">
+                <h5>Net qty: {{total_items}}</h5>
+                <h5>Total: ${{cart_total}}</h5>
+            </div>
+        </div>
+
+        <div class="col-md-5 px-md-4">
+            <h2>Delivery Information</h2>
+            <form action="" method="post">
+                {% csrf_token %}
+                {{order_form.phone|as_crispy_field}}
+                {{order_form.street|as_crispy_field}}
+                {{order_form.address|as_crispy_field}}
+                {{order_form.city|as_crispy_field}}
+                <div class="row row-cols-sm-2 g-1">
+                    {{order_form.country|as_crispy_field}}
+                    {{order_form.zipcode|as_crispy_field}}
+                </div>
+                <div class="my-2">
+                    <button type="submit" class="btn btn-success w-100">Confirm and place order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock maincontent %}
