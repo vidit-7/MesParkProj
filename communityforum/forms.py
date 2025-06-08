@@ -28,6 +28,9 @@ class ForumPostForm(ModelForm):
     def clean_video_url(self):
         url = str(self.cleaned_data.get('video_url'))
 
+        if url == "None":
+            return None
+
         valid_prefixes = [
             'https://www.youtube.com/watch?v=',
             'https://youtu.be/',

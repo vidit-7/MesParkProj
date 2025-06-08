@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
+from django.core.paginator import Paginator
+
 from communityforum.forms import ForumPostForm
 from communityforum.models import ForumPost,ForumComment,Topic
 
@@ -19,10 +21,12 @@ def communityHome(request):
 
     q = request.GET.get('search') if request.GET.get('search') != None else ''
     
-    forumPosts = ForumPost.objects.filter(Q(title__icontains=q)|Q(topics__name__icontains=q)).order_by('-posted').distinct()
-    count = forumPosts.count()
-
-    context = {'forumPosts':forumPosts,'topics':topics,'count':count}
+    forumPostsAll = ForumPost.objects.filter(Q(title__icontains=q)|Q(topics__name__icontains=q)).order_by('-posted').distinct()
+    count = forumPostsAll.count()
+    paginator = Paginator(forumPostsAll, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    context = {'forumPosts':page_obj,'topics':topics,'count':count, 'q':q}
     return render(request,'communityforum/community-home.html',context)
 
 @login_required(login_url='centBaseLoginUser')

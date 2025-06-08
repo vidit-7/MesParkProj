@@ -116,6 +116,19 @@ Community
                 {% endfor %}
             </div>
 
+            <div class="pagnums my-3 d-flex justify-content-center align-items-center">
+                    {% if forumPosts.has_previous %}
+                        <a class="mx-1 h6 text-decoration-none" href="?page=1{%if q%}&search={{q}}{%endif%}">&laquo; First</a>
+                        <a class="mx-1 h6 text-decoration-none" href="?page={{forumPosts.previous_page_number}}{%if q%}&search={{q}}{%endif%}">&larr; Previous</a>
+                    {% endif %}
+                    <div class="mx-2 h6 text-secondary">
+                        Page {{ forumPosts.number }} of {{ forumPosts.paginator.num_pages }}
+                    </div>
+                    {% if forumPosts.has_next %}
+                        <a class="mx-1 h6 text-decoration-none" href="?page={{ forumPosts.next_page_number }}{%if q%}&search={{q}}{%endif%}">Next &rarr;</a>
+                        <a class="mx-1 h6 text-decoration-none" href="?page={{ forumPosts.paginator.num_pages }}{%if q%}&search={{q}}{%endif%}">Last &raquo;</a>
+                    {% endif %}
+            </div>
         </div>
     </div>
 </div>
