@@ -12,6 +12,7 @@ Community
 
 <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasTopics" aria-labelledby="offcanvasTopicsLabel">
     <div class="offcanvas-header">
+        <a class="btn text-light btn-primary mb-2" href="{% url 'communityCreatePost' %}">Create a new post  <i class="bi bi-plus-square"></i></a>
         <h5 class="offcanvas-title" id="offcanvasTopicsLabel">Topics</h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
@@ -35,6 +36,7 @@ Community
             <!-- <button class="btn d-md-none my-2 d-md-none display-block" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMain" aria-expanded="false" aria-controls="sidebarMain" aria-label="toggle topics">
                 <span class="navbar-toggler-icon"></span>
             </button> -->
+            <a class="btn text-light btn-primary mb-2" href="{% url 'communityCreatePost' %}">Create a new post  <i class="bi bi-plus-square"></i></a>
             <div>
                 <a class="h6" href="{% url 'communityForumHome' %}">All</a>
                 <div class="text-secondary border-bottom secondary px-1 py-2">All posts</div>
@@ -65,7 +67,6 @@ Community
                     </div>
                 </form>
                 <h5 class="text-secondary">{{count}} post{% if count != 1 %}s{% endif %} found.</h5>
-                <a class="btn text-light btn-primary mb-2" href="{% url 'communityCreatePost' %}">Create a new post  <i class="bi bi-plus-square"></i></a>
             </div>
 
             <div class="">

@@ -1,0 +1,17 @@
+<div class="col-md-4 my-md-1 my-4">
+    <img class="rounded-2 img-fluid" src="{{bk.tour.imga.url}}" alt="">
+</div>
+<div class="col-md-8">
+    <a href="{% url 'parkTourExplore' bk.tour.id %}" class="h3 text-decoration-none">
+        <h3 class="border-bottom pb-2 mb-2">{{bk.tour.tour_type}} Tour Ticket</h3>
+    </a>
+    <div class="fs-5">
+        <p class="fs-6">
+            Under the name {{request.user.first_name}} {{request.user.last_name}}
+            <span class="text-secondary">(Phone: {{bk.phone}} | Email: {{bk.uemail}})</span>
+        </p>
+        <p>Tour cost: ${{bk.total_cost}}</p>
+        <p>Booking made for <span class="fw-bold">{{bk.num_visitors}} </span>visitor{%if bk.num_visitors > 1%}s{%endif%}
+            on <span class="fw-bold">{{bk.booking_date}}</span></p>
+    </div>
+</div>

@@ -71,6 +71,7 @@ class CartItem(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     # required now
+    uemail = models.EmailField(max_length=20, null=True)
     phone = models.CharField(max_length=20)
     street = models.CharField(max_length=150)
     address = models.TextField()

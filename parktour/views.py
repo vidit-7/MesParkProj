@@ -6,6 +6,8 @@ from django.utils import timezone
 from parktour.models import Tour, Booking
 from parktour.forms import BookingForm
 
+from parktour.mesmailh import tourBookingConfirmationMail
+
 import json
 from datetime import datetime
 # Create your views here.
@@ -39,6 +41,9 @@ def tourBook(request, pk):
                 
                 booking.save()
                 messages.success(request, "Your tour has been booked successfully. We hope to see you soon!")
+
+                tourBookingConfirmationMail(request.user, booking)
+
                 return redirect("parkTourBookings")
             else:
                 messages.error(request, "There was an error booking your tour. You may try again.")
@@ -136,6 +141,6 @@ def tourCheckStatus(request):
 @login_required(login_url="centBaseLoginUser")
 def tourBookings(request):
 
-    bookings = Booking.objects.filter(user=request.user).order_by('booking_date')
+    bookings = Booking.objects.filter(user=request.user).order_by('booking_date','-booked_at_date')
     context = {'bookings': bookings, 'booking_count': bookings.count()}
     return render(request, 'parktour/bookings.html', context)

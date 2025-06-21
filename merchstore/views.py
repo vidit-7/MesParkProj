@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
 from merchstore.models import Category, Product, CartItem, OrderItem, Order
 from merchstore.forms import OrderDeliveryForm
+
+from merchstore.mesmailh import merchOrderConfirmationMail
+
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
@@ -113,6 +116,9 @@ def merchCheckout(request):
             # delete the cart items to reset the cart
             cartItems.delete()
             messages.success(request,"Your order has been placed.")
+
+            merchOrderConfirmationMail(request.user, order)
+
         # else:
         #     messages.error(request,"Order could not be placed. Try again later or contact us.")
 
@@ -126,7 +132,7 @@ def merchCheckout(request):
         cart_total+=cartItem.item_qty_price()
         total_items+= cartItem.qty
 
-    initial_form_fields = {'phone': profile.phone,'street': profile.street, 'address': profile.address,'city': profile.city, 'country': profile.country, 'zipcode': profile.zipcode}
+    initial_form_fields = {'phone': profile.phone,'uemail':profile.user.email,'street': profile.street, 'address': profile.address,'city': profile.city, 'country': profile.country, 'zipcode': profile.zipcode}
     order_form = OrderDeliveryForm(initial=initial_form_fields)    
     context = {'order_form': order_form, 'cartItems': cartItems, 'cart_total': cart_total, 'total_items': total_items}
     if(total_items>0):

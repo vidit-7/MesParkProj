@@ -39,6 +39,7 @@
             <form action="" method="post">
                 {% csrf_token %}
                 {{order_form.phone|as_crispy_field}}
+                {{order_form.uemail|as_crispy_field}}
                 {{order_form.street|as_crispy_field}}
                 {{order_form.address|as_crispy_field}}
                 {{order_form.city|as_crispy_field}}

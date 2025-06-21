@@ -6,9 +6,10 @@ from merchstore.models import Order
 class OrderDeliveryForm(forms.ModelForm):
     class Meta:
         model = Order
-        fields = ['phone','street','address','city','country','zipcode']
+        fields = ['phone','uemail','street','address','city','country','zipcode']
         labels = {
             'phone': 'Phone number',
+            'uemail': 'Email address',
             'street': 'Block and Street',
             'address': 'Address',
             'city': 'City',
@@ -17,6 +18,7 @@ class OrderDeliveryForm(forms.ModelForm):
         }
         widgets = {
             'phone' : forms.TextInput(attrs={'class':'form-control','placeholder':'Your phone number...'}),
+            'uemail' : forms.EmailInput(attrs={'class':'form-control','placeholder':'Your email address...'}),
             'street' : forms.TextInput(attrs={'class':'form-control','placeholder':'Your block and street...'}),
             'address' : forms.Textarea(attrs={'class':'form-control','placeholder':'Your area\'s address...'}),
             'city' : forms.TextInput(attrs={'class':'form-control','placeholder':'City'}),
