@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MesPark Admin | Support</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/suppchat.css' %}">
+</head>
+<body>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+    </script>
+
+    <div class="container-fluid px-lg-3 px-2 pb-3">
+        <h1 class="display-6 mb-2">Park Admin - Support Conversations</h1>
+    <div class="outerChatCont row g-0 border border-3 border-tertiary rounded">
+        <div class="tickCont col-lg-3 d-none d-lg-block overflow-y-auto p-2 border-end">
+            <h2 class="h5">All tickets</h2>  
+            {% for suppTick in allSupTick %}
+            {% if not suppTick.status_closed %}
+            <div class="border-bottom mt-2 pt-1">
+                <a class="h6 text-decoration-none" href="{% url 'suppTicketConvoAdm' suppTick.disp_slug %}">
+                    <p>{{suppTick.user}} | {{suppTick.subject}}</p>
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% for suppTick in allSupTick %}
+            {% if  suppTick.status_closed %}
+            <div class="border-bottom mt-2 pt-1 disabled">
+                <a class="h6 text-decoration-none" href="{% url 'suppTicketConvoAdm' suppTick.disp_slug %}">
+                    <p>{{suppTick.subject}}</p>
+                </a>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="chatCont col-lg-9 d-flex flex-column justify-content-end">
+            <h1 class="h5 bg-body-tertiary text-center p-2">User: {{currTick.user}} | Subject: "{{currTick.subject}}"</h1>
+            <div id="chatArea" class="chatMsgs mb-2 overflow-y-auto flex-grow-1 p-2">
+                {% for msgDt, msgList in grpMsgs.items %}
+                <!-- <div> -->
+                <p>{{msgDt}}</p>
+                    {% for cMsg in msgList %}
+                        {% if cMsg.user.is_superuser or cMsg.user.is_staff %}
+                        <div class="messageCont ms-auto p-2 my-3 {% if cMsg.user == request.user %}bg-primary{%else%}bg-warning{% endif %} text-light rounded">
+                            <div>
+                                {{cMsg.user}}
+                                {{cMsg.msg_timestamp}}
+                            </div>
+                            <div>
+                                {{cMsg.msg_body}}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="messageCont me-auto p-2 my-3 bg-body-secondary rounded">
+                            <div>
+                                {{cMsg.user}}
+                                {{cMsg.msg_timestamp}}
+                            </div>
+                            <div>
+                                {{cMsg.msg_body}}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            <div class="message-form input-group p-2 my-1 border-top">
+                <textarea id="message-data" class="form-control" placeholder="Type your message here"></textarea>
+                <button id="send-suppmsg" data-ticket-id="{{currTick.id}}" class="btn btn-outline-primary group-text">Reply</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+    <script src="{% static 'js/suppchat.js' %}"></script> 
+</body>
+</html>

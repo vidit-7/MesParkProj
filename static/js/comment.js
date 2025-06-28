@@ -14,12 +14,20 @@ addCommentBtn.addEventListener('click', function(){
     let pId = this.dataset.postId;
     let commentData = commentInp.value;
     console.log(pId, commentData);
-    if(commentData!==''){
-        sendCommentToAdd(pId,commentData);
+    if(commentData.trim() !== ''){
         commentInp.value = "";
+        addCommentBtn.disabled = true;
+        sendCommentToAdd(pId,commentData).then(()=>{
+            location.reload();
+        }).catch((err)=>{  
+            commentInp.value = commentData;
+            console.log(err);
+        }).finally(()=>{
+            addCommentBtn.disabled = false;
+        });
     }
     else{
-        
+        console.log("empty comment");
     }
 });
 
@@ -35,13 +43,14 @@ for(let remBtn of remCommentBtns){
 }
 
 
-
 commentRemConf.addEventListener('click', function(){
     let commentId = this.dataset.commentremId;
     console.log(commentId);
     commentConf.style.display = "none";
-    sendCommentToDelete(commentId);
     commentConf.classList.add("d-none");
+    sendCommentToDelete(commentId).then(()=>{
+        location.reload();
+    }).catch(err=>console.log(err));
 });
 
 commentRemCancel.addEventListener('click', function(){
@@ -66,7 +75,7 @@ async function sendCommentToAdd(pId, commentBody) {
         let data = await response.json();
         console.log(data);
         // handle the logic of adding comment w/o reloading here later
-        location.reload();
+        // location.reload();
     }
     catch (e) {
         console.log(e);
@@ -89,7 +98,7 @@ async function sendCommentToDelete(commentId){
         let data = await response.json();
         console.log(data);
         // handle the logic of removing comment w/o reloading here later
-        location.reload();
+        // location.reload();
     }
     catch (e) {
         console.log(e);

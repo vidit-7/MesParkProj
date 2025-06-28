@@ -25,6 +25,7 @@ urlpatterns = [
     path('merchandise/', include('merchstore.urls')),
     path('community/', include('communityforum.urls')),
     path('tours/', include('parktour.urls')),
+    path('support/', include('suppticket.urls')),
 ]
 
 if settings.DEBUG:

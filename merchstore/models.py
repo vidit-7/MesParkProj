@@ -83,7 +83,7 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Order for {self.user} - {self.created_at}"
+        return f"Order for {self.user} - placed {self.created_at.strftime('on %d/%m/%Y at %H:%M:%S')}"
 
     def ord_total_price(self):
         # return sum(orderItem.total_price() for orderItem in self.orderitems.all())

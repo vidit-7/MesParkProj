@@ -1,6 +1,4 @@
 from django import forms
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
 from merchstore.models import Order
 
 class OrderDeliveryForm(forms.ModelForm):
@@ -18,7 +16,7 @@ class OrderDeliveryForm(forms.ModelForm):
         }
         widgets = {
             'phone' : forms.TextInput(attrs={'class':'form-control','placeholder':'Your phone number...'}),
-            'uemail' : forms.EmailInput(attrs={'class':'form-control','placeholder':'Your email address...'}),
+            'uemail' : forms.EmailInput(attrs={'class':'form-control','placeholder':'Your email address...'}), #,'required':'true'
             'street' : forms.TextInput(attrs={'class':'form-control','placeholder':'Your block and street...'}),
             'address' : forms.Textarea(attrs={'class':'form-control','placeholder':'Your area\'s address...'}),
             'city' : forms.TextInput(attrs={'class':'form-control','placeholder':'City'}),

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block headtitle %}
+Raise Issue
+{% endblock headtitle %}
+
+{% block maincontent %}
+<div class="container my-4">
+<h1 class="h5 pb-4">Create a support ticket</h1>
+
+<div class="content">
+    <form action="" method="POST">
+        {% csrf_token %}
+        {% if support_form.non_field_errors %}
+        {% for err in support_form.non_field_errors %}
+        <div class="alert alert-warning">{{err}}</div>
+        {% endfor %}
+        {% endif %}
+        <div>
+            {{support_form.subject|as_crispy_field}}
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {{support_form.support_type|as_crispy_field}}
+            </div>
+            <div id="supp_type_sel" class="col-md-6">
+                {{support_form.booking_sup|as_crispy_field}}
+                {{support_form.ord_sup|as_crispy_field}}
+            </div>
+        </div>
+        <div>
+            <button class="btn btn-primary mt-3 d-block" type="submit">Create support ticket</button>
+        </div>
+    </form>
+</div>
+</div>
+
+{% endblock maincontent %}
+
+{% block pagejs %}
+<script src="{% static 'js/ticketcrea.js' %}"></script>
+{% endblock %}

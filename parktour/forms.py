@@ -10,7 +10,11 @@ class TourForm(forms.ModelForm):
         fields = '__all__'
 
     def clean_video_url(self):
-        url = str(self.cleaned_data.get('video_url'))
+        url = self.cleaned_data.get('video_url')
+        
+        if not url or str(url).strip()=="":
+            return None
+        url = str(url).strip()
 
         valid_prefixes = [
             'https://www.youtube.com/watch?v=',
@@ -58,7 +62,7 @@ class BookingForm(forms.ModelForm):
         }
         widgets = {
             'phone' : forms.TextInput(attrs={'class':'form-control fs-sm-5','placeholder':'Your phone number...'}),
-            'uemail' : forms.EmailInput(attrs={'class':'form-control fs-sm-5','placeholder':'Your email address...'}),
+            'uemail' : forms.EmailInput(attrs={'class':'form-control fs-sm-5','placeholder':'Your email address...'}), #,'required':'true'
             # 'num_visitors': forms.Select(choices=[(1,'1'),(2,'2'),(3,'3'),(4,'4'),(5,'5'),
             #                                       (6,'6'),(7,'7'),(8,'8'),(9,'9'),(10,'10'),
             #                                       (11,'11'),(12,'12'),]),

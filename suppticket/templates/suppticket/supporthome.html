@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headtitle %}
+Support
+{% endblock headtitle %}
+
+{% block maincontent %}
+<div class="container">
+<h1 class="h4">Support page</h1>
+    <a href="{% url 'suppTicketCreate' %}" class="my-3 btn btn-outline-primary text-center">Need help? Click here to create a support ticket and chat with out staff.</a>
+{% if allSupTick %}
+    <h5>Your support tickets</h5>
+{% for suppTick in allSupTick %}
+    <div class="border-bottom mt-2 pt-1 {% if suppTick.status_closed %}disabled{% endif %}">
+        <a class="h6 text-decoration-none" href="{% url 'suppTicketChat' suppTick.disp_slug %}">
+            <div class="d-flex justify-content-between">
+                <p>{{suppTick.subject}}</p>
+                <p>{{suppTick.created_at}}</p>
+            </div>
+        </a>
+    </div>
+{% endfor %}
+{% else %}
+<h5>You don't have any tickets currently</h5>
+{% endif %}
+</div>
+
+{% endblock maincontent %}

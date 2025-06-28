@@ -1,0 +1,12 @@
+.tickCont, .chatCont{
+    height: 85vh;
+    /* height: 100%; */
+}
+
+.messageCont{
+    width: 75%;
+}
+
+/* div{
+    border: 1px solid red !important;
+} */

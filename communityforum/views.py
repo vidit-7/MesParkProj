@@ -98,29 +98,27 @@ def communitySeePost(request,pk):
 
 @login_required(login_url='centBaseLoginUser')
 def communityAddComment(request):
-    data = json.loads(request.body)
-
-    postId = data['postId']
-    commentData = data['commentData']
-
-    success = True
     try:
+        data = json.loads(request.body)
+        postId = data['postId']
+        commentData = data['commentData']
         tgtpost = ForumPost.objects.get(id=postId)
     except:
-        success = False
-
+        return JsonResponse({'success':False, 'error':'invalid'})
+    
+    if str(commentData).strip() == "":
+        return JsonResponse({'success':False, 'error':'empty'})
+    
     createdComment = ForumComment.objects.create(
         user = request.user,
         forumpost = tgtpost,
         comment = commentData,
     )
-
-    ctxDict = {
-        'createdcomment':commentData,
-        'success': success
-    }
+    
+    ctxDict = {'createdcomment':commentData,'success': True}
     messages.success(request, "Comment posted!")
     return JsonResponse(ctxDict)
+    
 
 # @login_required(login_url='centBaseLoginUser')
 # def communityDeleteComment(request,pk):
@@ -139,21 +137,17 @@ def communityAddComment(request):
 
 @login_required(login_url='centBaseLoginUser')
 def communityDeleteComment(request):
-    data = json.loads(request.body)
-    commentId = data['commentId']
-
-    success = True
-
     try:
+        data = json.loads(request.body)
+        commentId = data['commentId']
         commenttd = ForumComment.objects.get(id=commentId)
     except:
         # messages.warning(request, "comment not found")
-        success = False
-        return JsonResponse({"success":success})
+        return JsonResponse({"success":False})
 
     if commenttd.user == request.user:
         commenttd.delete()
         messages.success(request,'The comment has been deleted.')
-        return JsonResponse({'message': 'The comment has been deleted', 'success':success})
+        return JsonResponse({'message': 'The comment has been deleted', 'success':True})
     else:
         return HttpResponse('Unauthorized')

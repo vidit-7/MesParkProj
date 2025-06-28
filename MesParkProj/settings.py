@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'merchstore.apps.MerchstoreConfig',
     'communityforum.apps.CommunityforumConfig',
     'parktour.apps.ParktourConfig',
+    'suppticket.apps.SuppticketConfig',
     # outer apps
     'crispy_forms',
     'crispy_bootstrap5',

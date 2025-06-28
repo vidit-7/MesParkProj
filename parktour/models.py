@@ -25,7 +25,7 @@ class Tour(models.Model):
 class Booking(models.Model):
     tour = models.ForeignKey(Tour, on_delete=models.SET_NULL, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    uemail = models.EmailField(null=True, blank=True)
+    uemail = models.EmailField(null=True)
     phone = models.CharField(max_length=20)
     num_visitors = models.PositiveIntegerField()
     booking_date = models.DateField()
@@ -33,7 +33,7 @@ class Booking(models.Model):
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.tour.tour_type} - {self.user} - {self.booking_date}"
+        return f"{self.tour.tour_type} on {self.booking_date} - for {self.user} - booked {self.booked_at_date.strftime('on %d/%m/%Y at %H:%M:%S')}"
 
     def isWeekEnd(self):
         if (self.booking_date.weekday() >= 5):

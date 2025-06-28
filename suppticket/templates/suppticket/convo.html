@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block headtitle %}
+Support Conversation
+{% endblock headtitle %}
+
+{% block pagecss %} <link rel="stylesheet" href="{% static 'css/suppchat.css' %}"> {% endblock pagecss %}
+
+{% block maincontent %}
+<div class="container-fluid px-lg-3 px-2 pb-3">
+    <div class="outerChatCont row g-0 border border-3 border-tertiary rounded">
+        <div class="tickCont col-lg-3 d-none d-lg-block overflow-y-auto p-2 border-end">
+            <h2 class="h4 border-bottom border-2 py-1">Your tickets</h2>  
+            {% for suppTick in allSupTick %}
+                <div class="border-bottom mt-2 pt-1 {% if suppTick.status_closed %}disabled{% endif %}">
+                    <a class="h6 text-decoration-none" href="{% url 'suppTicketChat' suppTick.disp_slug %}">
+                        <p>{{suppTick.subject}}</p>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="chatCont col-lg-9 d-flex flex-column justify-content-end">
+            <h1 class="h4 bg-body-tertiary text-center p-2">Support Conversation - {{currTick.subject}}</h1>
+            <div id="chatArea" class="chatMsgs mb-2 overflow-y-auto flex-grow-1 p-2">
+                {% for msgDt, msgList in grpMsgs.items %}
+                <!-- <div> -->
+                <p class="mt-2 text-center border-bottom text-body-secondary">{{msgDt}}</p>
+                    {% for cMsg in msgList %}
+                        {% if cMsg.user == request.user %}
+                        <div class="messageCont ms-auto p-2 my-3 bg-body-secondary rounded">
+                            <div>
+                                {{cMsg.user}}
+                                {{cMsg.msg_timestamp}}
+                            </div>
+                            <div>
+                                {{cMsg.msg_body}}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="messageCont me-auto p-2 my-3 bg-primary text-light rounded">
+                            <div>
+                                {{cMsg.user}}
+                                {{cMsg.msg_timestamp}}
+                            </div>
+                            <div>
+                                {{cMsg.msg_body}}
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                <!-- <div class="my-2 h1">aaaa</div>
+                <div class="my-2 h1">aaaa</div>
+                <div class="my-2 h1">aaaa</div>
+                <div class="my-2 h1">aaaa</div>
+                <div class="my-2 h1">aaaa</div>
+                <div class="my-2 h1">aaaa</div>
+                <div class="my-2 h1">aaaa</div>
+                <div class="my-2 h1">aaaa</div>
+                <div class="my-2 h1">aaaa</div>
+                <div class="my-2 h1">aaaa</div> -->
+            </div>
+            <div class="message-form input-group p-2 my-1 border-top">
+                <textarea id="message-data" class="form-control" placeholder="Type your message here"></textarea>
+                <button id="send-suppmsg" data-ticket-id="{{currTick.id}}" class="btn btn-outline-primary group-text">Send <i class="bi bi-send mt-1"></i></button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock maincontent %}
+
+{% block pagejs %}
+<script src="{% static 'js/suppchat.js' %}"></script>
+{% endblock %}

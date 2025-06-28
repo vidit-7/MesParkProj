@@ -13,7 +13,9 @@ numVisitorsSel.addEventListener('change', function(){
     b_date = bookingDateSel.value;
     
     if(n_vis!="" && b_date!=""){    
-        getTourData(tourId, n_vis, b_date, 'check');
+        getTourData(tourId, n_vis, b_date, 'check').then((data)=>{
+            changeDispText(data);
+        }).catch(err=>console.log(err));
     }
 });
 
@@ -22,9 +24,24 @@ bookingDateSel.addEventListener('change', function(){
     n_vis = numVisitorsSel.value;
     b_date = bookingDateSel.value;
     if(n_vis!="" && b_date!=""){    
-        getTourData(tourId, n_vis, b_date, 'check');
+        getTourData(tourId, n_vis, b_date, 'check').then((data)=>{
+            changeDispText(data);
+        }).catch(err=>console.log(err));
     }
 });
+
+function changeDispText(data){
+    displayBookable.classList.remove('text-secondary');
+    displayBookable.textContent = data['show_message'];
+    if(!data["success"]){
+        displayBookable.classList.remove('text-success');
+        displayBookable.classList.add('text-danger');
+    }
+    else{
+        displayBookable.classList.remove('text-danger');
+        displayBookable.classList.add('text-success');
+    }
+}
 
 async function getTourData(tourId, numVis, bookDate, purpose) {
     try {
@@ -41,16 +58,7 @@ async function getTourData(tourId, numVis, bookDate, purpose) {
         );
         let data = await response.json();
         console.log(data);
-        displayBookable.classList.remove('text-secondary');
-        displayBookable.textContent = data['show_message'];
-        if(!data["success"]){
-            displayBookable.classList.remove('text-success');
-            displayBookable.classList.add('text-danger');
-        }
-        else{
-            displayBookable.classList.remove('text-danger');
-            displayBookable.classList.add('text-success');
-        }
+        return data;
     }
     catch (e) {
         console.log(e);

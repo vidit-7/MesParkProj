@@ -7,10 +7,11 @@
     </div>
 
     <ul class="d-flex flex-wrap">
-        <li class="nav-link m-2"><a href="#" class="nav-link px-2 text-body-secondary">Home</a></li>
-        <li class="nav-link m-2"><a href="#" class="nav-link px-2 text-body-secondary">Tours</a></li>
-        <li class="nav-link m-2"><a href="#" class="nav-link px-2 text-body-secondary">Merchandise</a></li>
-        <li class="nav-link m-2"><a href="#" class="nav-link px-2 text-body-secondary">Community</a></li>
-        <li class="nav-link m-2"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+        <li class="nav-link m-2"><a href="{% url 'centBaseHome' %}" class="nav-link px-2 text-body-secondary">Home</a></li>
+        <li class="nav-link m-2"><a href="{% url 'parkTourHome'%}" class="nav-link px-2 text-body-secondary">Tours</a></li>
+        <li class="nav-link m-2"><a href="{% url 'merchStoreHome'%}" class="nav-link px-2 text-body-secondary">Merchandise</a></li>
+        <li class="nav-link m-2"><a href="{% url 'communityForumHome' %}" class="nav-link px-2 text-body-secondary">Community</a></li>
+        <li class="nav-link m-2"><a href="{% url 'suppTicketUser' %}" class="nav-link px-2 text-body-secondary">Support</a></li>
+        <!-- <li class="nav-link m-2"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li> -->
     </ul>
 </footer>

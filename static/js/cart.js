@@ -9,7 +9,15 @@ for (let updBtn of updBtns) {
         // from base script
         if (gb_user != "AnonymousUser") {
             console.log("client: ", productId, productAction);
-            updateUserCart(productId, productAction);
+            updateUserCart(productId, productAction).then((data)=>{
+                if (page_loc[page_loc.length - 2] == 'cart') {
+                    // handle the logic of updating quantity, price here later
+                    location.reload();
+                }
+                else{
+                    prodPgAfterResponse(data);
+                }
+            });
             // highlight merch or cart link here later
             // updateHighlight();
         }
@@ -36,13 +44,7 @@ async function updateUserCart(pId, pAction) {
         );
         let data = await response.json();
         console.log(data);
-        if (page_loc[page_loc.length - 2] == 'cart') {
-            // handle the logic of updating quantity, price here later
-            location.reload();
-        }
-        else{
-            prodPgAfterResponse(data);
-        }
+        return data;
     }
     catch (e) {
         console.log(e);

@@ -48,8 +48,8 @@ class UserEditForm(forms.ModelForm):
             'email': 'Email',
         }
         widgets = {
-            'first_name' : forms.TextInput(attrs={'class':'form-control','placeholder':'First Name'}),
-            'last_name' : forms.TextInput(attrs={'class':'form-control','placeholder':'Last Name'}),
+            # 'first_name' : forms.TextInput(attrs={'class':'form-control','placeholder':'First Name'}),
+            # 'last_name' : forms.TextInput(attrs={'class':'form-control','placeholder':'Last Name'}),
             'email' : forms.EmailInput(attrs={'class':'form-control','placeholder':'Your email...'}),
         }
 

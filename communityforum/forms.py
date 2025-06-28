@@ -1,8 +1,8 @@
 from django import forms
-from django.forms import ModelForm
+from django import forms
 from communityforum.models import ForumPost,Topic
 
-class ForumPostForm(ModelForm):
+class ForumPostForm(forms.ModelForm):
 
     topics = forms.ModelMultipleChoiceField(queryset=Topic.objects.all(), 
                                             widget=forms.CheckboxSelectMultiple(attrs={"class":"d-flex"}),
@@ -26,11 +26,12 @@ class ForumPostForm(ModelForm):
         }
 
     def clean_video_url(self):
-        url = str(self.cleaned_data.get('video_url'))
+        url = self.cleaned_data.get('video_url')
 
-        if url == "None":
+        if not url or str(url).strip()=="":
             return None
-
+        url = str(url).strip()
+        
         valid_prefixes = [
             'https://www.youtube.com/watch?v=',
             'https://youtu.be/',
