@@ -79,63 +79,49 @@ def tourBook(request, pk):
 
 @login_required(login_url="centBaseLoginUser")
 def tourCheckStatus(request):
-    data = json.loads(request.body)
-    # print(data['bookDate'])
-    try:
-        tourId = data['tourId']
-        numVis = int(data['numVis'])
-        bookDate = datetime.strptime(data['bookDate'], "%Y-%m-%d").date()
-        purpose = data['purpose']
-    except:
-        return JsonResponse({'success': False, "show_message": "Error"})
+    if request.method == "POST":
+        # print(data['bookDate'])
+        try:
+            data = json.loads(request.body)
+            tourId = data['tourId']
+            numVis = int(data['numVis'])
+            bookDate = datetime.strptime(data['bookDate'], "%Y-%m-%d").date()
+            purpose = data['purpose']
+        except:
+            return JsonResponse({'success': False, "show_message": "Error"})
 
-    # check future date
-    if(bookDate<=timezone.now().date()):
-        return JsonResponse({'success': False, 'show_message': 'Please select a future date.'})
-    
-    # check already booked tours
-    if Booking.objects.filter(user=request.user, booking_date=bookDate).exists():
-        return JsonResponse({'success': False, 'show_message': f'You already have a tour booked on {bookDate}'})
-    # check num of slots
-    try:
-        fetch_tour = Tour.objects.get(id=tourId)
-    except:
-        return JsonResponse({'success': False, "show_message": "Error"})
-    
-    current_day_bookings = Booking.objects.filter(tour=fetch_tour, booking_date=bookDate)
-
-    current_day_visitors = 0
-    for booking in current_day_bookings:
-        current_day_visitors += booking.num_visitors
+        # check future date
+        if(bookDate<=timezone.now().date()):
+            return JsonResponse({'success': False, 'show_message': 'Please select a future date.'})
         
-    available_slots = fetch_tour.max_per_day - current_day_visitors
-    
-    if(available_slots >= numVis):
-        return JsonResponse({"success": True, "show_message": f"You can book a tour for {numVis} visitor(s) on {bookDate}."})
-    else:
-        if available_slots > 0:
-            show_message = f"Only {available_slots} slot(s) are available on {bookDate}."
-        else:
-            show_message = f"No slots available on {bookDate}. Please choose another date."
-        return JsonResponse({"success": False, "show_message": show_message})
-    
+        # check already booked tours
+        if Booking.objects.filter(user=request.user, booking_date=bookDate).exists():
+            return JsonResponse({'success': False, 'show_message': f'You already have a tour booked on {bookDate}'})
+        # check num of slots
+        try:
+            fetch_tour = Tour.objects.get(id=tourId)
+        except:
+            return JsonResponse({'success': False, "show_message": "Error"})
+        
+        current_day_bookings = Booking.objects.filter(tour=fetch_tour, booking_date=bookDate)
 
-    # can_book = False
-    # if(available_slots>=numVis):
-    #     can_book = True
-    
-    # if purpose == 'check':
-    #     ctxDict = {
-    #         'success': True,
-    #         'f_name': request.user.first_name,
-    #         'l_name': request.user.last_name,
-    #         'available_slots' : available_slots,
-    #         'can_book' : can_book
-    #     }
-    #     return JsonResponse(ctxDict)
-    
-    # else:
-    #     return JsonResponse({'successc': False})
+        current_day_visitors = 0
+        for booking in current_day_bookings:
+            current_day_visitors += booking.num_visitors
+            
+        available_slots = fetch_tour.max_per_day - current_day_visitors
+        
+        if(available_slots >= numVis):
+            return JsonResponse({"success": True, "show_message": f"You can book a tour for {numVis} visitor(s) on {bookDate}."})
+        else:
+            if available_slots > 0:
+                show_message = f"Only {available_slots} slot(s) are available on {bookDate}."
+            else:
+                show_message = f"No slots available on {bookDate}. Please choose another date."
+            return JsonResponse({"success": False, "show_message": show_message})
+
+    else:
+        return HttpResponse("Invalid request")
 
 
 @login_required(login_url="centBaseLoginUser")

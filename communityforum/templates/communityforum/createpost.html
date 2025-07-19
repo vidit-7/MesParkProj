@@ -15,6 +15,7 @@
         {% csrf_token %}
         {{form|crispy}}
         <div>
+            <a href="{% url 'communityForumHome' %}" class="btn btn-outline-secondary me-2">Cancel</a>
             <input class="btn btn-primary" type="submit" value="{{act}} Post">
         </div>
     </form>

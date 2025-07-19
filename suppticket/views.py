@@ -57,29 +57,57 @@ def suppTicketChat(request, pk):
 
 @login_required(login_url='centBaseLoginUser')
 def suppSendMess(request):
-    try:
-        data = json.loads(request.body)
-        ticketId = data['ticketId']
-        messageBody = data['messageBody']
-        suppTick = SupportTicket.objects.get(id=ticketId)
-    except:
-        return JsonResponse({'success':False, 'error':'invalid'})
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            ticketId = data['ticketId']
+            messageBody = data['messageBody']
+            suppTick = SupportTicket.objects.get(id=ticketId)
+        except:
+            return JsonResponse({'success':False, 'error':'invalid'})
+        
+        if str(messageBody).strip() == "":
+            return JsonResponse({'success':False, 'error':'empty'})
+        if not (request.user.is_staff or request.user.is_superuser):
+            if request.user != suppTick.user:
+                return JsonResponse({'success':False, 'error':'forbidden'})
+        
+        createdMessage = SupportMessage.objects.create(
+            ticket = suppTick,
+            user = request.user,
+            msg_body = messageBody
+        )
+        # context = {'success':True, 'msgUser': createdMessage.user, 'msgTick': createdMessage.ticket, 'msgBody': createdMessage.msg_body}
+        # messages.success(request, "")
+        context = {'success':True, 'createdMsg': messageBody}
+        return JsonResponse(context)
     
-    if str(messageBody).strip() == "":
-        return JsonResponse({'success':False, 'error':'empty'})
-    if not (request.user.is_staff or request.user.is_superuser):
-        if request.user != suppTick.user:
-            return JsonResponse({'success':False, 'error':'forbidden'})
+    else:
+        return HttpResponse("Invalid request")
+
+def suppMsgRefresh(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            ticketId = data['ticketId']
+            lastMsgId = data['lastMsgId']
+            suppTick = SupportTicket.objects.get(id=ticketId)
+            freshLastMsgId = SupportMessage.objects.filter(ticket=suppTick).order_by('id').last()
+        except:
+            return JsonResponse({"success": False, "error": "invalid data"})
+        
+        if suppTick.user != request.user:
+            return JsonResponse({"success": False, "error": "Forbidden"})
+        
+        # print(str(freshLastMsgId.id))
+        # print(str(lastMsgId))
+        if str(freshLastMsgId.id) == str(lastMsgId):
+            return JsonResponse({"success":True, "newMsgRec":False})
+        else:
+            return JsonResponse({"success":True, "newMsgRec":True})
     
-    createdMessage = SupportMessage.objects.create(
-        ticket = suppTick,
-        user = request.user,
-        msg_body = messageBody
-    )
-    # context = {'success':True, 'msgUser': createdMessage.user, 'msgTick': createdMessage.ticket, 'msgBody': createdMessage.msg_body}
-    # messages.success(request, "")
-    context = {'success':True, 'createdMsg': messageBody}
-    return JsonResponse(context)
+    else:
+        return HttpResponse("Invalid request")
 
 @login_required(login_url="centBaseLoginUser")
 def suppConvoAdminAll(request, pk):

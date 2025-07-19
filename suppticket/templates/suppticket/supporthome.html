@@ -12,7 +12,7 @@ Support
 {% if allSupTick %}
     <h5>Your support tickets</h5>
 {% for suppTick in allSupTick %}
-    <div class="border-bottom mt-2 pt-1 {% if suppTick.status_closed %}disabled{% endif %}">
+    <div class="border-bottom mt-2 py-2 {% if suppTick.status_closed %}disabled{% endif %}">
         <a class="h6 text-decoration-none" href="{% url 'suppTicketChat' suppTick.disp_slug %}">
             <div class="d-flex justify-content-between">
                 <p>{{suppTick.subject}}</p>

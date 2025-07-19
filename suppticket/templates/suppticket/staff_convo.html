@@ -34,11 +34,11 @@
             <h2 class="h5">All tickets</h2>  
             {% for suppTick in allSupTick %}
             {% if not suppTick.status_closed %}
-            <div class="border-bottom mt-2 pt-1">
-                <a class="h6 text-decoration-none" href="{% url 'suppTicketConvoAdm' suppTick.disp_slug %}">
-                    <p>{{suppTick.user}} | {{suppTick.subject}}</p>
-                </a>
-            </div>
+            <a class="h6 text-decoration-none" href="{% url 'suppTicketConvoAdm' suppTick.disp_slug %}">
+                <div class="bg-body-tertiary mt-1 p-2">
+                    <p>@{{suppTick.user}} |  {{suppTick.created_at|date}}<br>{{suppTick.subject}}</p>
+                </div>
+            </a>
             {% endif %}
             {% endfor %}
             {% for suppTick in allSupTick %}
@@ -56,26 +56,30 @@
             <div id="chatArea" class="chatMsgs mb-2 overflow-y-auto flex-grow-1 p-2">
                 {% for msgDt, msgList in grpMsgs.items %}
                 <!-- <div> -->
-                <p>{{msgDt}}</p>
+                <p class="mt-4 pt-4 text-center border-bottom text-body-secondary">{{msgDt}}</p>
                     {% for cMsg in msgList %}
                         {% if cMsg.user.is_superuser or cMsg.user.is_staff %}
-                        <div class="messageCont ms-auto p-2 my-3 {% if cMsg.user == request.user %}bg-primary{%else%}bg-warning{% endif %} text-light rounded">
-                            <div>
-                                {{cMsg.user}}
-                                {{cMsg.msg_timestamp}}
+                        <div class="messageCont ms-auto p-2 my-3 {% if cMsg.user == request.user %}shadow{%else%}bg-warning{% endif %} rounded">
+                            <div class="pb-1 mb-2 border-bottom">
+                                @{{cMsg.user}}
                             </div>
                             <div>
-                                {{cMsg.msg_body}}
+                                {{cMsg.msg_body|linebreaks}}
+                            </div>
+                            <div class="text-body-secondary text-end">
+                                {{cMsg.msg_timestamp|time}}
                             </div>
                         </div>
                         {% else %}
                         <div class="messageCont me-auto p-2 my-3 bg-body-secondary rounded">
-                            <div>
-                                {{cMsg.user}}
-                                {{cMsg.msg_timestamp}}
+                            <div class="pb-1 mb-2 border-bottom">
+                                @{{cMsg.user}}
                             </div>
                             <div>
-                                {{cMsg.msg_body}}
+                                {{cMsg.msg_body|linebreaks}}
+                            </div>
+                            <div class="text-body-secondary text-end">
+                                {{cMsg.msg_timestamp|time}}
                             </div>
                         </div>
                         {% endif %}

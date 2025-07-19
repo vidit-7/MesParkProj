@@ -1,6 +1,7 @@
 const messageInp = document.querySelector("#message-data");
 const sendMessageBtn = document.querySelector("#send-suppmsg");
 const messageSectionDiv = document.querySelector("#chatArea");
+// const refreshForMsgBtn = document.querySelector("#refeshForNew");
 
 function scrollToLastChatMsg(){
     // messageInp.style.height = "auto";
@@ -66,3 +67,47 @@ async function sendMessageToAdd(ticketId, messageBody){
         console.log(err);
     }
 }
+
+async function checkForNewMessages(ticketId, lastMsgId) {
+    try{
+        let response = await fetch(
+            '/support/msgrefresh-polling/',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({'ticketId': ticketId, 'lastMsgId': lastMsgId})
+            }
+        );
+        let data = await response.json();
+        return data;
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
+// refreshForMsgBtn.addEventListener('click', function(){
+//     location.reload();
+// });
+
+function pollingForMsgs(){
+    let tId = sendMessageBtn.dataset.ticketId;
+    let lastMessage = messageSectionDiv.lastElementChild;
+    if(lastMessage!=null){
+        checkForNewMessages(tId, lastMessage.id).then((data)=>{
+            // console.log(data['newMsgRec']);
+            if(data['newMsgRec']){
+                location.reload();
+                // refreshForMsgBtn.classList.remove('btn-outline-secondary');
+                // refreshForMsgBtn.classList.add('btn-outline-primary')
+            }
+        }).catch(err=>console.log(err));  
+    }
+}
+
+setInterval(() => {
+    pollingForMsgs();
+}, 10000);

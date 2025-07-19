@@ -7,5 +7,6 @@ urlpatterns = [
     path('create-support-ticket/', views.suppCreateTicket, name="suppTicketCreate"),
     path('support-converstion/<slug:pk>', views.suppTicketChat, name="suppTicketChat"),
     path('add-supmessage/', views.suppSendMess, name="suppSendJsonMessage"),
+    path('msgrefresh-polling/', views.suppMsgRefresh, name="suppTickJsonMsgRef"),
     path('support-admin-conversation/<slug:pk>', views.suppConvoAdminAll, name="suppTicketConvoAdm")
 ]

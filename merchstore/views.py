@@ -47,50 +47,53 @@ def merchCart(request):
 
 @login_required(login_url="centBaseLoginUser")
 def merchUpdateCart(request):
-    data = json.loads(request.body)
-    productId = data['productId']
-    productAction = data['productAction']
+    if request.method == "POST":
+        data = json.loads(request.body)
+        productId = data['productId']
+        productAction = data['productAction']
 
-    success = True
-    try:
-        product = Product.objects.get(id=productId)
-        cartItem, created = CartItem.objects.get_or_create(user=request.user, prod=product)
-    except:
-        success = False
-        return JsonResponse({'success':success})
-
-    if not product.available:
-        return HttpResponse("Not available")
-
-    full = False
-
-    if productAction == "add":
-        if(cartItem.qty < cartItem.prod.cart_max):
-            cartItem.qty = (cartItem.qty + 1)
-        else:
+        success = True
+        try:
+            product = Product.objects.get(id=productId)
+            cartItem, created = CartItem.objects.get_or_create(user=request.user, prod=product)
+        except:
             success = False
-            full = True
-    elif productAction == "reduct":
-        if(cartItem.qty >=1 ):
-            cartItem.qty = (cartItem.qty - 1)
-        else:
-            success = False
+            return JsonResponse({'success':success})
 
-    cartItem.save()
+        if not product.available:
+            return HttpResponse("Not available")
 
-    if cartItem.qty <= 0:
-        cartItem.delete()
+        full = False
 
-    # return JsonResponse(f"Server resp: {productAction} {productId}", safe=False)
-    ctxDict = {
-        'updPId': productId,
-        'prodName': product.name, #added later
-        'updQty': cartItem.qty,
-        'updPrice': cartItem.item_qty_price(),
-        'success': success,
-        'full': full
-    }
-    return JsonResponse(ctxDict)
+        if productAction == "add":
+            if(cartItem.qty < cartItem.prod.cart_max):
+                cartItem.qty = (cartItem.qty + 1)
+            else:
+                success = False
+                full = True
+        elif productAction == "reduct":
+            if(cartItem.qty >=1 ):
+                cartItem.qty = (cartItem.qty - 1)
+            else:
+                success = False
+
+        cartItem.save()
+
+        if cartItem.qty <= 0:
+            cartItem.delete()
+
+        # return JsonResponse(f"Server resp: {productAction} {productId}", safe=False)
+        ctxDict = {
+            'updPId': productId,
+            'prodName': product.name, #added later
+            'updQty': cartItem.qty,
+            'updPrice': cartItem.item_qty_price(),
+            'success': success,
+            'full': full
+        }
+        return JsonResponse(ctxDict)
+    else:
+        return HttpResponse("Invalid request")
 
 @login_required(login_url="centBaseLoginUser")
 def merchCheckout(request):
