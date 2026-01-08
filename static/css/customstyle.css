@@ -92,8 +92,14 @@ footer{
 
 .prof-wid{
     max-width: 95vw;
+    /* height: 80vh; */
     margin-left: auto;
     margin-right: auto;
+}
+
+.profile-past-sect{
+    height: 80vh;
+    overflow-y: auto;
 }
 
 /* .shadowDiv:hover{

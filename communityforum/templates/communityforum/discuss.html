@@ -50,7 +50,7 @@ Forum Post
         <div class="my-2">
             {% if forumPost.video_url != None %}
             <div class="ratio ratio-16x9 d-flex justify-content-center align-items-center">
-                <iframe src="{{forumPost.video_url}}" frameborder="0" allowfullscreen></iframe>
+                <iframe src="{{forumPost.video_url}}" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
             </div>
             {% endif %}
             {% if forumPost.image.url != '' %}

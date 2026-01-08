@@ -33,7 +33,9 @@
             <img class="cart-img" src="{{cartItem.prod.image.url}}" alt="">
         </div>
         <div class="col-md-6 col-7 d-flex flex-column p-2 flex-grow-1 justify-content-start">
-            <h5 class="border-bottom border-body-secondary pb-2">{{cartItem.prod.name}}</h5>
+            <a href="{% url 'merchStoreProduct' cartItem.prod.id %}" target="_blank" class="h5 border-bottom border-body-secondary pb-2 text-decoration-none">
+                {{cartItem.prod.name}}
+            </a>
             <div class="mt-auto d-flex justify-content-evenly align-items-center">
                 <div>
                     {% if cartItem.prod.isOnSale %}

@@ -32,9 +32,9 @@
             {% endif %}
         </div>
         <div class="col-lg-8">
-            <div class="row">
+            <div class="row mb-3">
                 <!-- <section id="community-profile"> -->
-                <div class="col-md-6">
+                <div class="col-md-7 shadow-sm profile-past-sect">
                     <h4 class="h5 mb-3 py-2 border-bottom">Posts</h4>
                     {% for forumPost in forumPosts %}
                     <div class="container my-3 p-2 border border-secondary border-2 rounded shadowDiv ">
@@ -61,7 +61,7 @@
                         {% if forumPost.video_url != None %}
                         <div class="ratio ratio-16x9 d-flex justify-content-center align-items-center border rounded">
                             <iframe class="rounded" src="{{forumPost.video_url}}" frameborder="0"
-                                allowfullscreen></iframe>
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                         </div>
                         {% elif forumPost.image.url != '' %}
                         <div class="ratio ratio-16x9 d-flex justify-content-center align-items-center">
@@ -72,7 +72,7 @@
                     </div>
                     {% endfor %}
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5 shadow-sm profile-past-sect">
                     <h4 class="h5 mb-3 py-2 border-bottom">Comments</h4>
                     {% for fcomment in forumComments %}
                     <div class="shadow-sm mb-3 p-2">

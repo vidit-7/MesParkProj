@@ -10,3 +10,5 @@ themeSetDark.addEventListener('click', function(){
     document.cookie = `theme=dark; path=/; max-age=${1000*60*60*24*90}`;
     applyTheme();
 });
+
+// applyTheme defined in base html file

@@ -102,7 +102,7 @@ Community
 
                     {% if forumPost.video_url != None %}
                     <div class="ratio ratio-16x9 d-flex justify-content-center align-items-center border rounded">
-                        <iframe class="rounded" src="{{forumPost.video_url}}" frameborder="0" allowfullscreen></iframe>
+                        <iframe class="rounded" src="{{forumPost.video_url}}" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                     </div>
                     {% elif forumPost.image.url != '' %}
                     <div class="ratio ratio-16x9 d-flex justify-content-center align-items-center">
