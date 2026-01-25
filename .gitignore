@@ -17,7 +17,8 @@ secrets.py
 .env/
 
 # === Media files (user uploads) ===
-media/
+/media/*
+!/media/defaults/
 
 # === Virtual environments ===
 venv/

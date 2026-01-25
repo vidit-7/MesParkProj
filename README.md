@@ -4,8 +4,6 @@
 
 ---
 
-## You must have python 3.10.x or higher installed to run this project.
-
 ## 1. Download or clone the project
 1. Download the project zip file and unzip it in any folder of your choosing 
 2. Or open a terminal in the location of the outer folder and paste the git clone command.
