@@ -47,6 +47,12 @@
                     {{order_form.country|as_crispy_field}}
                     {{order_form.zipcode|as_crispy_field}}
                 </div>
+                <div class="my-1">
+                    {{order_form.payment_method|as_crispy_field}}
+                </div>
+                <div class="my-2">
+                    <div class="fw-bold alert alert-info">Note: In case of online payment failure, your order will be converted to cash on delivery</div>
+                </div>
                 <div class="my-2">
                     <button type="submit" class="btn btn-success w-100">Confirm and place order</button>
                 </div>

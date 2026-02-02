@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.http import JsonResponse
+from django.conf import settings
+
 from merchstore.models import Category, Product, CartItem, OrderItem, Order
 from merchstore.forms import OrderDeliveryForm
 
 from merchstore.mesmailh import merchOrderConfirmationMail
+from merchstore.mespayments import create_checkout_session, retrieve_checkout_session
 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -118,15 +121,23 @@ def merchCheckout(request):
             OrderItem.objects.bulk_create(order_items)
             # delete the cart items to reset the cart
             cartItems.delete()
-            messages.success(request,"Your order has been placed.")
 
-            merchOrderConfirmationMail(request.user, order)
-
-        # else:
-        #     messages.error(request,"Order could not be placed. Try again later or contact us.")
-
-        return redirect('merchStoreOrders')
-    
+            if not settings.STRIPE_KEYS_SET:
+                messages.success(request,"Your order has been placed.")
+                merchOrderConfirmationMail(request.user, order)
+                return redirect('merchStoreOrders')
+            else:
+                payment_method = order_form.cleaned_data['payment_method']
+                if payment_method == 'method_stripe':
+                    session = create_checkout_session(order)
+                    order.stripe_session_id = session.id
+                    order.save(update_fields=['stripe_session_id'])
+                    return redirect(session.url)
+                else:
+                    messages.success(request,"Your order has been placed.")
+                    merchOrderConfirmationMail(request.user, order)
+                    return redirect('merchStoreOrders')
+                
     profile = request.user.profile
     cartItems = CartItem.objects.filter(user=request.user)
     cart_total = 0
@@ -143,6 +154,35 @@ def merchCheckout(request):
     else:
         messages.warning(request, "Add some items to your cart to checkout.")
         return redirect('merchStoreCart')
+ 
+
+@login_required
+def confirmMerchPayment(request):
+    if not settings.STRIPE_KEYS_SET:
+        return HttpResponse("Stripe not configured")
+
+    session_id = request.GET.get('session_id')
+    if not session_id:
+        return HttpResponse("No session id provided")
+
+    session = retrieve_checkout_session(session_id)
+    try:
+        order = Order.objects.get(stripe_session_id=session_id, user=request.user)
+    except:
+        return HttpResponse("Order not found")
+
+    if order.payment_status == 'PAID':
+        return redirect('merchStoreOrders')
+
+    if session.payment_status == 'paid':
+        messages.success(request,"Payment Successful. Your order has been placed.")
+        order.payment_status = 'PAID'
+    else:
+        messages.info(request, "Payment Failed. Your order has been placed and converted to cash on delivery. Feel free to contact us for any help.")
+
+    merchOrderConfirmationMail(request.user, order)
+    order.save(update_fields=['payment_status'])
+    return redirect('merchStoreOrders')
 
 @login_required(login_url="centBaseLoginUser")
 def merchOrders(request):

@@ -2,6 +2,17 @@ from django import forms
 from merchstore.models import Order
 
 class OrderDeliveryForm(forms.ModelForm):
+    PAYMENT_CHOICES = [
+        ('method_cod', 'Cash on Delivery'),
+        ('method_stripe', 'Card (Stripe)'),
+    ]
+
+    payment_method = forms.ChoiceField(
+        choices=PAYMENT_CHOICES,
+        widget=forms.RadioSelect,
+        required=True,
+    )
+
     class Meta:
         model = Order
         fields = ['phone','uemail','street','address','city','country','zipcode']

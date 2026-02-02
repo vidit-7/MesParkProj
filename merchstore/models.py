@@ -82,6 +82,15 @@ class Order(models.Model):
     delivered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    PAYMENT_STATUS_OPTIONS = [
+        ("CASH_ON_DELIVERY", "Cash on delivery"),
+        ("PAID", "Paid"),
+    ]
+
+    payment_status = models.CharField(max_length=25, choices=PAYMENT_STATUS_OPTIONS, default="CASH_ON_DELIVERY")
+    stripe_session_id = models.CharField(max_length=255, unique=True, null=True)
+    payment_done_at = models.DateTimeField(null=True, blank=True)
+
     def __str__(self):
         return f"Order for {self.user} - placed {self.created_at.strftime('on %d/%m/%Y at %H:%M:%S')}"
 
@@ -112,7 +121,7 @@ class OrderItem(models.Model):
 
 
     def __str__(self):
-        return f"{self.order.user} - {self.prod} - {self.qty}"
+        return f"{self.order.id} - {self.order.user} - {self.prod} - {self.qty}"
 
     def total_price(self):
         return self.price * self.qty

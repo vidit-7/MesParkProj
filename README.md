@@ -13,7 +13,7 @@
 2. Run ```python -m venv env``` to create a virtual environment. (Optional step)
 3. To activate the venv on - cmd (windows): ```env/bin/activate.bat``` or bash: ```source env/bin/activate``` (Optional step)
 4. Then run ```pip install -r requirements.txt``` to install dependencies.
-5. Create a file name ```secrets.py``` in ```MesPrakProj/MesParkProj``` and paste the following in it ```my_secret_key = "enter-your-secret-key-here"```. **OR** just run ```python -c "from django.core.management.utils import get_random_secret_key; print(f\"my_secret_key = '{get_random_secret_key()}'\")" > MesParkProj/secrets.py``` in the terminal.
+5. Run ```python -c "from django.core.management.utils import get_random_secret_key; print(f\"my_secret_key = '{get_random_secret_key()}'\\nstripe_test_public_key = None\\nstripe_test_secret_key = None\")" > MesParkProj/secrets.py``` in the terminal.
 
 ## 3. Make migrations and create a superuser
 1. First run ```python manage.py makemigrations```

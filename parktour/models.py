@@ -32,6 +32,14 @@ class Booking(models.Model):
     booked_at_date = models.DateTimeField(auto_now_add=True, null=True)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)
 
+    PAYMENT_STATUS_OPTIONS = [
+        ("PAY_ON_ARRIVAL", "Pay on arrival"),
+        ("PAID", "Paid"),
+    ]
+    payment_status = models.CharField(max_length=25, choices=PAYMENT_STATUS_OPTIONS, default="PAY_ON_ARRIVAL")
+    stripe_session_id = models.CharField(max_length=255, unique=True, null=True)
+    payment_done_at = models.DateTimeField(null=True, blank=True)
+
     def __str__(self):
         return f"{self.tour.tour_type} on {self.booking_date} - for {self.user} - booked {self.booked_at_date.strftime('on %d/%m/%Y at %H:%M:%S')}"
 

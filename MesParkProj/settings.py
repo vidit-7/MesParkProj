@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-from .secrets import my_secret_key
+from .secrets import my_secret_key, stripe_test_public_key, stripe_test_secret_key
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -147,7 +147,17 @@ MEDIA_URL = 'media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# DOMAIN
+
+DOMAIN = "http://localhost:8000"
+
 # Email config for testing
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Stripe Payment
+
+STRIPE_KEYS_SET = True # Change to true if you wish to use your own stripe keys
+
+STRIPE_PUBLIC_KEY = stripe_test_public_key
+STRIPE_SECRET_KEY = stripe_test_secret_key
