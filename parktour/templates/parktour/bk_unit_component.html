@@ -6,12 +6,13 @@
         <h3 class="border-bottom pb-2 mb-2">{{bk.tour.tour_type}} Tour Ticket</h3>
     </a>
     <div class="fs-5">
-        <p class="fs-6">
+        <div class="fs-6">
             Under the name {{request.user.first_name}} {{request.user.last_name}}
             <span class="text-secondary">(Phone: {{bk.phone}} | Email: {{bk.uemail}})</span>
-        </p>
-        <p>Tour cost: ${{bk.total_cost}}</p>
-        <p>Booking made for <span class="fw-bold">{{bk.num_visitors}} </span>visitor{%if bk.num_visitors > 1%}s{%endif%}
-            on <span class="fw-bold">{{bk.booking_date}}</span></p>
+        </div>
+        <div class="m-2">Tour cost: ${{bk.total_cost}}</div>
+        <div class="m-2">Payment status: {% if bk.payment_status == 'PAID' %} Paid {% else %} On Arrival {% endif %}</div>
+        <div class="m-2">Booking made for <span class="fw-bold">{{bk.num_visitors}} </span>visitor{%if bk.num_visitors > 1%}s{%endif%}
+            on <span class="fw-bold">{{bk.booking_date}}</span></div>
     </div>
 </div>

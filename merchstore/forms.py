@@ -3,7 +3,7 @@ from merchstore.models import Order
 
 class OrderDeliveryForm(forms.ModelForm):
     PAYMENT_CHOICES = [
-        ('method_cod', 'Cash on Delivery'),
+        ('method_cod', 'Cash On Delivery'),
         ('method_stripe', 'Card (Stripe)'),
     ]
 

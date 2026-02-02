@@ -84,7 +84,7 @@ class BookingForm(forms.ModelForm):
             raise forms.ValidationError("Please select a future date.")
         
         if self.fv_user and tdate:
-            if Booking.objects.filter(user=self.fv_user, booking_date=tdate).exists():
+            if Booking.objects.filter(user=self.fv_user, booking_date=tdate, booking_stage="CONFIRMED").exists():
                 raise forms.ValidationError("You already have a tour booked for the selected day. Please choose a different date.")
             
         return tdate
@@ -103,7 +103,7 @@ class BookingForm(forms.ModelForm):
         num_wish = cleaned_data.get('num_visitors')
 
         if self.fv_tour and tdate and num_wish:
-            existing_day_bookings = Booking.objects.filter(tour=self.fv_tour, booking_date=tdate)
+            existing_day_bookings = Booking.objects.filter(tour=self.fv_tour, booking_date=tdate, booking_stage="CONFIRMED")
             # booked_total = sum(b.num_visitors for b in existing)
             already_attending_visitors = 0
             for booking in existing_day_bookings:

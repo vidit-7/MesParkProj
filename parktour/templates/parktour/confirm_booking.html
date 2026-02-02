@@ -35,10 +35,21 @@
     <div class="container">
         <form action="" method="POST">
             {% csrf_token %}
-            <div class="d-none">
-                {{booking_form|crispy}}
-            </div>
             <input type="hidden" name="confirm-final" value="True">
+            <div class="my-2">
+                <div class="my-2">Payment method: </div>
+                <div class="my-1">
+                    <input type="radio" name="payment_method" value="method_poa" id="pay_method_poa" required>
+                    <label for="pay_method_poa">On Arrival</label>
+                </div>
+                <div class="my-1">
+                    <input type="radio" name="payment_method" value="method_stripe" id="pay_method_stripe">
+                    <label for="pay_method_stripe">Card (Stripe)</label>
+                </div>
+            </div>
+            <div class="my-2">
+                <div class="fw-bold alert alert-info">Note: In case of online payment failure, you can pay on arrival.</div>
+            </div>
             <button type="submit" id="book-conf" class="btn btn-success btn-lg text-center w-100 my-3">Go ahead and book the tour!</button>
         </form>
     </div>
