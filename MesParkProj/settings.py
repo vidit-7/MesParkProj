@@ -157,7 +157,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Stripe Payment
 
-STRIPE_KEYS_SET = True # Change to true if you wish to use your own stripe keys
+STRIPE_KEYS_SET = False # Change to true if you wish to use your own stripe keys
 
 STRIPE_PUBLIC_KEY = stripe_test_public_key
 STRIPE_SECRET_KEY = stripe_test_secret_key
