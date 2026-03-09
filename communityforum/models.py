@@ -34,6 +34,9 @@ class ForumPost(models.Model):
             return self.content[:250]+"..."
         return self.content
 
+    def getCommentCount(self):
+        self.forumcomment_set.count()
+
 class ForumComment(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     forumpost = models.ForeignKey(ForumPost, on_delete=models.CASCADE)
@@ -49,3 +52,25 @@ class ForumComment(models.Model):
             return self.comment[0:25] + '...'
         else:
             return self.comment
+        
+    def getReplyCount(self):
+        self.forumcommentreply_set.count()
+
+class ForumCommentReply(models.Model):
+    class Meta:
+        verbose_name_plural = "Forum comment replies"
+
+    forumcomment = models.ForeignKey(ForumComment, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reply_body = models.TextField()
+    posted = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.shortReply()}"
+    
+    def shortReply(self):
+        if len(self.reply_body)>25:
+            return self.reply_body[0:25] + '...'
+        else:
+            return self.reply_body

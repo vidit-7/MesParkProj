@@ -42,8 +42,8 @@ Forum Post
         </div>
 
         {% if request.user == forumPost.user %}
-        <a class="btn btn-sm btn-secondary" href="{% url 'communityEditPost' forumPost.id %}">Edit Post <i class="bi bi-pen"></i></a>
         <a class="btn btn-sm btn-danger" href="{% url 'communityDeletePost' forumPost.id %}">Delete Post <i class="bi bi-trash3"></i></a>
+        <a class="btn btn-sm btn-secondary" href="{% url 'communityEditPost' forumPost.id %}">Edit Post <i class="bi bi-pen"></i></a>
         {% endif %}
 
 
@@ -62,12 +62,12 @@ Forum Post
         </div>
     </div>
 
-    <h3 class="p-2">Comments: </h3>
+    <h3 class="display-6">Comments: </h3>
     <div class="comment-wrapper p-2">
         {% if request.user.is_authenticated %}
-        <div class="comment-form input-group">
+        <div id="comment-input-div" class="comment-form input-group">
             <textarea id="comment-data" class="form-control" placeholder="Type your comment here"></textarea>
-            <button id="add-comment" data-post-id="{{forumPost.id}}" class="btn btn-primary group-text">Send <i class="bi bi-send mt-1"></i></button>
+            <button id="btn-add-comment" data-post-id="{{forumPost.id}}" class="btn btn-primary group-text">Send <i class="bi bi-send mt-1"></i></button>
         </div>
         {% else %}
         <div>
@@ -75,23 +75,65 @@ Forum Post
         </div>
         {% endif %}
        
-        {% for fcomment in fcomments %}
+        {% for fcomment in forumPost.forumcomment_set.all %}
         <div class="my-4 border-start border-bottom rounded border-1 border-tertiary p-2">
-            <div class="d-flex justify-content-start align-items-center border-bottom mb-2 pb-2">
-                <div>
-                    <img class="rounded-circle img-fluid profileimg" src="{{fcomment.user.profile.pic.url}}" alt="">
-                    <a class="h6 text-decoration-none" href="{% url 'centBaseProfile' fcomment.user.id %}">
-                        @{{fcomment.user}}</a> - <span class="text-secondary">{{fcomment.posted|timesince}} ago</span>
+            <div>
+                <div class="d-flex justify-content-start align-items-start border-bottom mb-2 pb-2">
+                    <div>
+                        <img class="rounded-circle img-fluid profileimg" src="{{fcomment.user.profile.pic.url}}" alt="">
+                        <a class="h6 text-decoration-none" href="{% url 'centBaseProfile' fcomment.user.id %}">
+                            @{{fcomment.user}}</a> - <span class="text-secondary">{{fcomment.posted|timesince}} ago</span>
+                    </div>
+                    <div class="ms-auto p-2">
+                        {% if request.user.is_authenticated %}
+                        <button class="btn btn-sm btn-outline-secondary fw-bold mx-1 btn-prompt-reply" data-repcomment-body = "{{fcomment.shortComment}}"
+                        data-comment-id="{{fcomment.id}}" data-repuser-name="{{fcomment.user}}"><i class="bi bi-reply"></i> Reply</button>
+                        {% else %}
+                        <a class="btn btn-sm btn-outline-secondary fw-bold mx-2 btn-prompt-reply" 
+                        href="{% url 'centBaseLoginUser' %}"><i class="bi bi-reply"></i> Reply</a>
+                        {% endif %}
+                        {% if request.user == fcomment.user %}
+                        <button class="btn btn-sm btn-outline-danger fw-bold mx-1 remove-comment" data-commentrem-id="{{fcomment.id}}" data-remtype="comment">
+                            <i class="bi bi-trash3"></i> Delete 
+                        </button>
+                        {% endif %}
+                    </div>
                 </div>
-                {% if request.user == fcomment.user %}
-
-                <button class="btn btn-sm btn-outline-danger fw-bold mx-2 remove-comment" data-commentrem-id="{{fcomment.id}}">Delete <i class="bi bi-trash3"></i></button>
-                {% endif %}
+                <div class="my-2 ps-1">{{fcomment.comment|linebreaks}}</div>
             </div>
-            <div class="my-2 ps-1">{{fcomment.comment|linebreaks}}</div>
+            <div>
+                {% for freply in fcomment.forumcommentreply_set.all %}
+                <div class="my-1 border-start border-2 border-tertiary p-2 ms-4 mb-4">
+                    <div class="d-flex justify-content-start align-items-start border-bottom mb-1 pb-1">
+                        <div>
+                            <img class="rounded-circle img-fluid profileimg" src="{{freply.user.profile.pic.url}}" alt="">
+                            <a class="h6 text-decoration-none" href="{% url 'centBaseProfile' freply.user.id %}">
+                                @{{freply.user}}</a> - <span class="text-secondary">{{freply.posted|timesince}} ago</span>
+                        </div>
+                        <div class="ms-auto p-1">
+                            {% if request.user == freply.user %}
+                            <button class="btn btn-sm btn-outline-danger fw-bold mx-2 remove-comment" data-commentrem-id="{{freply.id}}" data-remtype="reply">
+                                <i class="bi bi-trash3"></i> Delete 
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="my-2 ps-1">{{freply.reply_body|linebreaks}}</div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
         {% endfor %}
+        <div id="reply-input-cont" class="d-none sticky-bottom p-2 bg-body-tertiary shadow-sm rounded mb-1">
+            <div id="replying-to-info" class="fw-bold"></div>
+            <div id="reply-input-div" class="reply-form input-group rounded-2">
+                <textarea id="reply-data" class="form-control" placeholder="Type your reply here"></textarea>
+                <button id="btn-cancel-reply" class="btn btn-secondary group-text">Cancel </button>
+                <button id="btn-add-reply" class="btn btn-primary group-text">Send <i class="bi bi-send mt-1"></i></button>
+            </div>
+        </div>
     </div>
+
 </div>
 
 {% endblock maincontent %}

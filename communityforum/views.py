@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 
 from communityforum.forms import ForumPostForm
-from communityforum.models import ForumPost,ForumComment,Topic
+from communityforum.models import ForumPost, ForumComment, ForumCommentReply, Topic
 
 import json
 
@@ -80,9 +80,15 @@ def communityDeletePost(request,pk):
     return render(request,'communityforum/delete_confirm.html',context)
     
 
-def communitySeePost(request,pk):
-    forumPost = ForumPost.objects.get(id=pk)
-    fcomments = ForumComment.objects.filter(forumpost__id=pk).order_by('-posted')
+def communitySeePost(request, pk):
+    forumPostNestedData = ForumPost.objects.prefetch_related("forumcomment_set__forumcommentreply_set").get(id=pk)
+    context = {'forumPost': forumPostNestedData}
+    # context = {}
+    return render(request, 'communityforum/discuss.html', context)
+
+    # fcomments = ForumComment.objects.filter(forumpost__id=pk).order_by('-posted')
+    # forumPost = ForumPost.objects.get(id=pk)
+    
 
     # if request.method == 'POST':
     #     newcomment = ForumComment.objects.create(
@@ -93,8 +99,6 @@ def communitySeePost(request,pk):
         
     #     return redirect('seeFPost', pk = forumPost.id)
 
-    context = {'forumPost':forumPost,'fcomments':fcomments}
-    return render(request, 'communityforum/discuss.html', context)
 
 @login_required(login_url='centBaseLoginUser')
 def communityAddComment(request):
@@ -103,7 +107,7 @@ def communityAddComment(request):
             data = json.loads(request.body)
             postId = data['postId']
             commentData = data['commentData']
-            tgtpost = ForumPost.objects.get(id=postId)
+            tgtPost = ForumPost.objects.get(id=postId)
         except:
             return JsonResponse({'success':False, 'error':'invalid'})
         
@@ -112,12 +116,38 @@ def communityAddComment(request):
         
         createdComment = ForumComment.objects.create(
             user = request.user,
-            forumpost = tgtpost,
-            comment = commentData,
+            forumpost = tgtPost,
+            comment = str(commentData).strip(),
         )
         
-        ctxDict = {'createdcomment':commentData,'success': True}
+        ctxDict = {'createdcomment':commentData, 'success': True}
         messages.success(request, "Comment posted!")
+        return JsonResponse(ctxDict)
+    else:
+        return HttpResponse('Invalid request')
+
+@login_required(login_url="centBaseLoginUser")
+def communityAddCommentReply(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            commentId = data['commentId']
+            replyData = data['replyData']
+            tgtComment = ForumComment.objects.get(id=commentId)
+        except:
+            return JsonResponse({'success':False, 'error':'invalid'})
+        
+        if str(replyData).strip() == "":
+            return JsonResponse({'success':False, 'error':'empty'})
+        
+        createdReply = ForumCommentReply.objects.create(
+            user = request.user,
+            forumcomment = tgtComment,
+            reply_body = str(replyData).strip(),
+        )
+        
+        ctxDict = {'createdreply':replyData, 'success': True}
+        messages.success(request, "Reply posted!")
         return JsonResponse(ctxDict)
     else:
         return HttpResponse('Invalid request')
@@ -139,19 +169,28 @@ def communityAddComment(request):
 
 @login_required(login_url='centBaseLoginUser')
 def communityDeleteComment(request):
+    print("delete")
     if request.method == "POST":
         try:
             data = json.loads(request.body)
+            commentType = data['commentType']
             commentId = data['commentId']
-            commenttd = ForumComment.objects.get(id=commentId)
+            commenttd = None
+            print(commentType, commentId)
+            if commentType == "comment":
+                commenttd = ForumComment.objects.get(id=commentId)
+            elif commentType == "reply":
+                commenttd = ForumCommentReply.objects.get(id=commentId)
+            else:
+                return JsonResponse({"success": False, "msg": "invalid type"})
         except:
             # messages.warning(request, "comment not found")
-            return JsonResponse({"success":False})
+            return JsonResponse({"success": False})
 
         if commenttd.user == request.user:
             commenttd.delete()
-            messages.success(request,'The comment has been deleted.')
-            return JsonResponse({'message': 'The comment has been deleted', 'success':True})
+            messages.success(request, f'The {commentType} has been deleted.')
+            return JsonResponse({'message': 'The comment has been deleted', 'success': True})
         else:
             return HttpResponse('Unauthorized')
     else:

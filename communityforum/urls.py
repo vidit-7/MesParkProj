@@ -9,6 +9,7 @@ urlpatterns = [
     path('edit-post/<str:pk>',views.communityEditPost,name='communityEditPost'),
     path('delete-post/<str:pk>',views.communityDeletePost,name='communityDeletePost'),
     path('add-comment/',views.communityAddComment, name='communityAddComment'),
+    path('add-reply/', views.communityAddCommentReply, name="communityAddCommentReply"),
     path('delete-comment/',views.communityDeleteComment,name='communityDeleteComment'),
     # path('delete-comment/<str:pk>',views.communityDeleteComment,name='communityDeleteComment'),
 ]

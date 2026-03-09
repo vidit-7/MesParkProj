@@ -57,7 +57,7 @@
         {% include 'navigation.html' %}
         <main>
         {% if messages %}
-        <div class="container-fluid mt-2 mb-2">
+        <div class="container-fluid mt-2 mb-2 show cus-alert-div">
             {% for message in messages %}
             {% if message.tags != 'error' %}
             <div class="alert alert-{{message.tags}} alert-dismissible fade show">{{message}} <button type="button"
